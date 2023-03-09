@@ -1,0 +1,21 @@
+package CommandStream;
+
+import java.util.Scanner;
+
+public class CmdCommandStream implements  CommandStream{
+    @Override
+    public String[] getCommandFromStream() {
+        Scanner scanner = new Scanner(System.in);
+        try{
+            String line = scanner.nextLine();
+            if (line.startsWith("#") || line.isEmpty())
+                getCommandFromStream();
+            String[] command = line.split(" ");
+            return command;
+        }
+        catch(Exception e) {
+
+            return null;
+        }
+    }
+}
