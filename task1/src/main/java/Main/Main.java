@@ -6,23 +6,34 @@ import Context.Context;
 import Factory.CommandFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        CommandStream stream;
-        if (args.length != 1){
-            System.out.println("Incorrect cmd arguments: "+ Arrays.toString(args) +" , running console mode");
+        String argLine = null;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the source file or press [ENTER] for console mode: ");
+        String [] arguments = scanner.nextLine().split(" ");
+        CommandStream stream = null;
+        if (arguments.length != 1 || Objects.equals(arguments[0], "")){
+            if (arguments[0] == ""){
+                System.out.println("Switching to console mode...");
+            }
+            else {
+                System.out.println("Cannot open file: " + Arrays.toString(arguments) + " , running console mode...");
+            }
+            System.out.println("========================================================");
             stream = new CmdCommandStream();
         }
         else{
             try {
-                stream = new FileCommandStream(args[0]);
+                stream = new FileCommandStream(arguments[0]);
+                System.out.println("Opened file: "+ arguments[0] +" , running file mode");
+                System.out.println("========================================================");
             } catch (Exception e) {
-                throw new RuntimeException("Cant find a file"+args[0]+" , running in console mode");
+                System.out.println("Cant find a file "+arguments[0]+" , running in console mode");
+                System.out.println("========================================================");
+                stream = new CmdCommandStream();
             }
         }
         CommandFactory factory = null;
