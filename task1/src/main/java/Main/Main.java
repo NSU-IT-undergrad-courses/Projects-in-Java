@@ -4,19 +4,16 @@ import CommandStream.*;
 import Commands.Command;
 import Context.Context;
 import Factory.CommandFactory;
-
-import java.io.IOException;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String argLine = null;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the source file or press [ENTER] for console mode: ");
         String [] arguments = scanner.nextLine().split(" ");
-        CommandStream stream = null;
-        if (arguments.length != 1 || Objects.equals(arguments[0], "")){
-            if (arguments[0] == ""){
+        CommandStream stream;
+        if ((arguments.length != 1) || Objects.equals(arguments[0], "")){
+            if (Objects.equals(arguments[0], "")){
                 System.out.println("Switching to console mode...");
             }
             else {
@@ -36,16 +33,12 @@ public class Main {
                 stream = new CmdCommandStream();
             }
         }
-        CommandFactory factory = null;
-        try {
-            factory = new CommandFactory("../config.properties");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        CommandFactory factory;
+        factory = new CommandFactory("../config.properties");
         Context context = new Context();
-        String [] line = null;
+        String [] line;
         while ((line = stream.getCommandFromStream()) != null) {
-            Command command = null;
+            Command command;
             command = factory.create(line[0].toUpperCase());
             List<String> list = new ArrayList<>(Arrays.asList(line));
             list.remove(0);

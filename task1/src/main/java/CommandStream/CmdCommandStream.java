@@ -10,8 +10,7 @@ public class CmdCommandStream implements  CommandStream{
             String line = scanner.nextLine();
             if (line.startsWith("#") || line.isEmpty())
                 getCommandFromStream();
-            String[] command = line.split(" ");
-            return command;
+            return line.split(" ");
         }
         catch(Exception e) {
 
