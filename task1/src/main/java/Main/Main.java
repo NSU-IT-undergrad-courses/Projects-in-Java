@@ -8,13 +8,17 @@ import Exception.CommandStream.FileCommandStream.FleCommandStreamException;
 import Exception.Factory.FactoryException;
 import Factory.CommandFactory;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class Main {
+    private static final Logger log = Logger.getLogger(Main.class.getName());
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Logger log = Logger.getLogger(String.valueOf(Main.class));
+        LoggerInit(false);
         log.info("Started the calculator");
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the source file or press [ENTER] for console mode: ");
@@ -74,10 +78,25 @@ public class Main {
             command.execute(context, line);
             }catch (CommandException e){
                 log.warning(e.getMessage());
-            }catch (Exception e){
-                log.warning(e.getMessage());
             }
         }
         log.info("Stopping the calculator");
     }
+
+    private static void LoggerInit(boolean ConsoleOut) {
+        try {
+            Logger rootLogger = Logger.getLogger("");
+            FileHandler fileHandler = new FileHandler("calculator.log");
+            fileHandler.setFormatter(new SimpleFormatter());
+            rootLogger.addHandler(fileHandler);
+            if (!ConsoleOut) {
+                rootLogger.removeHandler(rootLogger.getHandlers()[0]);
+                rootLogger.setLevel(Level.ALL);
+            }
+
+        } catch (IOException e) {
+            log.log(Level.WARNING, "Cant open file, IOException ", e);
+        }
+    }
+
 }
