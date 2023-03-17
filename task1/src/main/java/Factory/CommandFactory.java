@@ -1,10 +1,9 @@
 package Factory;
 
 import Commands.Command;
-import Commands.Unknown;
+import Exception.Factory.CantFindClassException;
 import Exception.Factory.FactoryInitException;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -12,10 +11,9 @@ public class CommandFactory {
     public CommandFactory(String property_name){
         try {InputStream stream = getClass().getResourceAsStream(property_name);
         classes.load(stream);
-        } catch (FactoryInitException e){
-            throw new FactoryInitException("Error: Cannot continue work.");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e){
+            throw new FactoryInitException("Error, couldn't init fabric. Cannot continue work.");
+            //need log
         }
     }
     public Command create(String command_sign) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -25,7 +23,7 @@ public class CommandFactory {
         Command command = (Command) command_class.newInstance();
         return command;
         }catch(Exception e){
-            return new Unknown(command_sign);
+            throw new CantFindClassException(command_sign);
         }
 
     }

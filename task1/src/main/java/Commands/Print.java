@@ -8,8 +8,8 @@ public class Print extends Command{
     public void execute(Context context, String[] arguments) {
         try {
             System.out.println(context.peekValue());
-        } catch(StackNotEnoughElements e){
-            System.err.println("Not enough elements on stack for command: "+this.getClass());
+        } catch(Exception e){
+            throw new StackNotEnoughElements("Not enough elements on stack for command: "+this.getClass().getSimpleName());
         }
     }
 }

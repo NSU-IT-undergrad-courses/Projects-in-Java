@@ -1,16 +1,20 @@
 package CommandStream;
 
-import Commands.Command;
+import Exception.CommandStream.FileCommandStream.NotFoundException;
 
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class FileCommandStream implements  CommandStream{
-    private InputStream filestream;
-    private Scanner scanner;
+    private final Scanner scanner;
     public FileCommandStream(String file) {
-        filestream = getClass().getClassLoader().getResourceAsStream(file);
-        scanner = new Scanner(filestream);
+        try {
+            InputStream filestream = getClass().getClassLoader().getResourceAsStream(file);
+            scanner = new Scanner(Objects.requireNonNull(filestream));
+        }catch(Exception e){
+            throw new NotFoundException(file);
+        }
     }
 
     @Override
@@ -19,8 +23,7 @@ public class FileCommandStream implements  CommandStream{
             String line = scanner.nextLine();
             if (line.startsWith("#") || line.isEmpty())
                 getCommandFromStream();
-            String[] command = line.split(" ");
-            return command;
+            return line.split(" ");
         }
         catch(Exception e) {
 

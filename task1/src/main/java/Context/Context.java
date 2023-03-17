@@ -13,7 +13,7 @@ public class Context {
         this.variables.put(name, value);
     }
 
-    private Map<String, Double> variables = new HashMap<String, Double>();
+    private final Map<String, Double> variables = new HashMap<>();
     public Double getValue() {
         return stack.pop();
     }
@@ -26,5 +26,5 @@ public class Context {
         this.stack.push(value);
     }
 
-    private Stack<Double> stack = new Stack<Double>();
+    private final Stack<Double> stack = new Stack<>();
 }
