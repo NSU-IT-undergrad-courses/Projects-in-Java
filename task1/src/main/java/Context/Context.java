@@ -26,5 +26,9 @@ public class Context {
         this.stack.push(value);
     }
 
+    public Stack getStack() {
+        return stack;
+    }
+
     private final Stack<Double> stack = new Stack<>();
 }
