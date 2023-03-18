@@ -1,11 +1,9 @@
-import Commands.*;
-import Context.Context;
-import Factory.CommandFactory;
+import org.example.commands.*;
+import org.example.context.Context;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalcTest {
-    CommandFactory factory = new CommandFactory("../config.properties");
     Context context = new Context();
     @org.junit.jupiter.api.Test
     void Define() {
@@ -72,12 +70,12 @@ class CalcTest {
 
     @org.junit.jupiter.api.Test
     void Sub() {
-        Substraction substraction = new Substraction();
+        Subtraction subtraction = new Subtraction();
         Push push = new Push();
         String [] arguments = "2 3 2.25".split(" ");
         push.execute(context, arguments);
         arguments = "2".split(" ");
-        substraction.execute(context, arguments);
+        subtraction.execute(context, arguments);
         assertEquals(context.getValue(),-0.75);
     }
 
