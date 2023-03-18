@@ -13,7 +13,6 @@ public class CommandFactory {
         classes.load(stream);
         } catch (Exception e){
             throw new FactoryInitException("Error, couldn't init fabric. Cannot continue work.");
-            //need log
         }
     }
     public Command create(String command_sign){
