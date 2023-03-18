@@ -17,7 +17,7 @@ import java.util.logging.SimpleFormatter;
 
 public class Main {
     private static final Logger log = Logger.getLogger(Main.class.getName());
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         LoggerInit(false);
         log.info("Started the calculator");
         Scanner scanner = new Scanner(System.in);
