@@ -16,16 +16,15 @@ public class CommandFactory {
             //need log
         }
     }
-    public Command create(String command_sign) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public Command create(String command_sign){
         try{
             String command_class_name = this.classes.getProperty(command_sign);
         Class<?> command_class = Class.forName("Commands."+command_class_name);
-        Command command = (Command) command_class.newInstance();
-        return command;
+            return (Command) command_class.newInstance();
         }catch(Exception e){
             throw new CantFindClassException(command_sign);
         }
 
     }
-    private Properties classes = new Properties();
+    private final Properties classes = new Properties();
 }
