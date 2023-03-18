@@ -1,0 +1,16 @@
+мар. 18, 2023 2:33:54 AM Main.Main main
+INFO: Started the calculator
+мар. 18, 2023 2:33:55 AM Main.Main main
+INFO: Switching to console mode...
+мар. 18, 2023 2:34:05 AM Main.Main main
+INFO: Executing Push with arguments[10]
+мар. 18, 2023 2:34:07 AM Main.Main main
+INFO: Executing Print with arguments[]
+мар. 18, 2023 2:34:13 AM Main.Main main
+INFO: Executing Power with arguments[2]
+мар. 18, 2023 2:34:16 AM Main.Main main
+INFO: Executing Print with arguments[]
+мар. 18, 2023 2:34:21 AM Main.Main main
+INFO: Executing Power with arguments[0.5]
+мар. 18, 2023 2:34:23 AM Main.Main main
+INFO: Executing Print with arguments[]
