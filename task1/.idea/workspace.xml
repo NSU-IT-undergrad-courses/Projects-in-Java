@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dcebdf6b-9f7f-4347-8942-232a2d9098e8" name="Changes" comment="Сделал тесты">
-      <change afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/FigureFabric.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/view/GameView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../task2/Game/src/main/resources/fabric/types.proeprties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/board.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/chessboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/chessboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/boardFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/BoardFigure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/figure.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/Figure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/resources/default.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/resources/default.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,6 +95,8 @@
       <workItem from="1679900044099" duration="15000" />
       <workItem from="1679900904501" duration="14000" />
       <workItem from="1681214114221" duration="33000" />
+      <workItem from="1681217187545" duration="672000" />
+      <workItem from="1681217982068" duration="8000" />
     </task>
     <task id="LOCAL-00001" summary="накидал лабу">
       <created>1678333245978</created>

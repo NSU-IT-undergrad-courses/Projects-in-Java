@@ -5,8 +5,8 @@ import org.example.model.figure.types.CellFigure;
 
 import java.util.ArrayList;
 
-public class chessboard implements board{
-    public chessboard() {
+public class ChessBoard implements board{
+    public ChessBoard() {
         Figure fig = new CellFigure();
         this.board = new ArrayList<>(64);
         for (int i = 0; i<64;i++){

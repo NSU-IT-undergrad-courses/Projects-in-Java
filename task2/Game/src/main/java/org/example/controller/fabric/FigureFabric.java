@@ -1,4 +1,6 @@
-package org.example.model.figure;
+package org.example.controller.fabric;
+
+import org.example.model.figure.Figure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,11 +23,10 @@ public class FigureFabric {
     public Figure create(String line) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String [] arguments = line.split("#");
         String type = arguments[3];
-        System.out.println(type);
         try{
             String fig_type = String.valueOf(types.get(type));
-            Class<?> command_class = Class.forName(fig_type);
-            Figure fig = (Figure) command_class.getDeclaredConstructor().newInstance();
+            Class<?> fig_class = Class.forName(fig_type);
+            Figure fig = (Figure) fig_class.getDeclaredConstructor().newInstance();
             fig.setName(arguments[0]);
             fig.setAttack(Integer.valueOf(arguments[1]));
             fig.setDefense(Integer.valueOf(arguments[2]));

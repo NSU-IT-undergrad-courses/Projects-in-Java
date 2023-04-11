@@ -1,12 +1,19 @@
-package org.example.model.figure;
+package org.example.model.figure.types;
 
-public class ForwardFigure implements Figure{
+import org.example.model.figure.Figure;
+
+public class ForwardFigure implements Figure {
     public ForwardFigure(String name, Integer attack, Integer defense){
         this.name = name;
         this.attack = attack;
         this.defense = defense;
     }
 
+    public ForwardFigure(){
+        this.name = "NOTFOUND";
+        this.attack = 0;
+        this.defense = 0;
+    }
     private String name;
     private Integer attack;
     private Integer defense;
