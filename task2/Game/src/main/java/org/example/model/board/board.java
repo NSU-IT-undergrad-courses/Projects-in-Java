@@ -1,12 +1,12 @@
 package org.example.model.board;
 
-import org.example.model.figure.figure;
+import org.example.model.figure.Figure;
 
 import java.util.ArrayList;
 
 public interface board {
-    public ArrayList<figure> getBoard();
-    public void setBoard(ArrayList<figure> figures);
-    public void setPlace(int length, int width, figure fig);
-    public figure getPlace(int length, int width);
+    public ArrayList<Figure> getBoard();
+    public void setBoard(ArrayList<Figure> Figures);
+    public void setPlace(int length, int width, Figure fig);
+    public Figure getPlace(int length, int width);
 }

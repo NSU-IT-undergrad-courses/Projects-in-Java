@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dcebdf6b-9f7f-4347-8942-232a2d9098e8" name="Changes" comment="Сделал тесты">
+      <change afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/FigureFabric.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/view/GameView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../task2/Game/src/main/resources/fabric/types.proeprties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/board.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/chessboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/board/chessboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/boardFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/BoardFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/figure.java" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/java/org/example/model/figure/Figure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../task2/Game/src/main/resources/default.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../task2/Game/src/main/resources/default.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2Ma3LkKBW6znKJEfTEJl0BQfmuw" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;18&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/21202-kurashchenko-oop-java/task1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\21202-kurashchenko-oop-java\task1\src\test\java" />
+      <recent name="C:\21202-kurashchenko-oop-java\task1\src\main\java" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="Commands" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dcebdf6b-9f7f-4347-8942-232a2d9098e8" name="Changes" comment="" />
+      <created>1677991812897</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1677991812897</updated>
+      <workItem from="1677991814103" duration="639000" />
+      <workItem from="1678170957794" duration="7555000" />
+      <workItem from="1678315311877" duration="9805000" />
+      <workItem from="1678429578106" duration="2477000" />
+      <workItem from="1678663816680" duration="2481000" />
+      <workItem from="1679028709639" duration="1749000" />
+      <workItem from="1679039326351" duration="10742000" />
+      <workItem from="1679080793650" duration="2826000" />
+      <workItem from="1679118575520" duration="4916000" />
+      <workItem from="1679899822431" duration="22000" />
+      <workItem from="1679900044099" duration="15000" />
+      <workItem from="1679900904501" duration="14000" />
+      <workItem from="1681214114221" duration="33000" />
+    </task>
+    <task id="LOCAL-00001" summary="накидал лабу">
+      <created>1678333245978</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678333245978</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Косметика по консольному вводу, остались&#10;Исключения&#10;Логи&#10;Тесты">
+      <created>1678334533585</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678334533585</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Упорно накидываю исключения&#10;Остались искл, тест, логи">
+      <created>1678666185648</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678666185648</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Сделал исключения, охренеть можно&#10;Почти сделал логи, остались тесты">
+      <created>1679049824299</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1679049824299</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Сделал логи">
+      <created>1679081752490</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1679081752490</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Сделал тесты">
+      <created>1679108332942</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1679108332942</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Сделал тесты">
+      <created>1679119238389</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679119238389</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Сделал тесты">
+      <created>1679119318140</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679119318140</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Сделал тесты">
+      <created>1679120405691</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1679120405691</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Сделал тесты">
+      <created>1679123039308</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1679123039308</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.log" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="накидал лабу" />
+    <MESSAGE value="Косметика по консольному вводу, остались&#10;Исключения&#10;Логи&#10;Тесты" />
+    <MESSAGE value="Упорно накидываю исключения&#10;Остались искл, тест, логи" />
+    <MESSAGE value="Сделал исключения, охренеть можно&#10;Почти сделал логи, остались тесты" />
+    <MESSAGE value="Сделал логи" />
+    <MESSAGE value="Сделал тесты" />
+    <option name="LAST_COMMIT_MESSAGE" value="Сделал тесты" />
+  </component>
+</project>

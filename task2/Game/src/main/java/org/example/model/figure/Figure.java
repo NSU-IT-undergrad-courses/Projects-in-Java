@@ -1,8 +1,8 @@
 package org.example.model.figure;
 
-public interface figure {
+public interface Figure {
     public String getName();
-    public void setName();
+    public void setName(String name);
 
     public void setAttack(Integer attack_value);
     public Integer getAttack();
@@ -13,5 +13,6 @@ public interface figure {
     public String getMove();
 
     public String getTrace();
-    public void setTrace(String trace);
+
+
 }
