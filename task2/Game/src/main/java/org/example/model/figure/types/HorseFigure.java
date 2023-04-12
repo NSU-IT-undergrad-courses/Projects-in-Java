@@ -2,6 +2,9 @@ package org.example.model.figure.types;
 
 import org.example.model.figure.Figure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HorseFigure implements Figure {
     public HorseFigure(String name, Integer attack, Integer defense){
         this.name = name;
@@ -12,10 +15,7 @@ public class HorseFigure implements Figure {
     private String name;
     private Integer attack;
     private Integer defense;
-
-    private String move;
-
-    private String trace;
+    private List<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {
@@ -47,14 +47,22 @@ public class HorseFigure implements Figure {
         return defense;
     }
 
-    @Override
-    public String getMove() {
-        return move;
+    public HorseFigure() {
+        this.name = "NONDEFINED";
+        this.attack = 0;
+        this.defense = 0;
     }
 
     @Override
-    public String getTrace() {
-        return "Horse";
+    public void setTrace(String[] trace_arguments) {
+        this.trace.add(23);
+        this.trace.add(32);
+    }
+
+
+    @Override
+    public List<Integer> getTrace() {
+        return trace;
     }
 
 }

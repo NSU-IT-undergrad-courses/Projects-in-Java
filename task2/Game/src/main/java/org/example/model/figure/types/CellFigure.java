@@ -2,6 +2,9 @@ package org.example.model.figure.types;
 
 import org.example.model.figure.Figure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CellFigure implements Figure {
     public CellFigure(String name, Integer attack, Integer defense){
         this.name = name;
@@ -15,7 +18,7 @@ public class CellFigure implements Figure {
 
     private String move;
 
-    private String trace;
+    private ArrayList<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {
@@ -48,12 +51,12 @@ public class CellFigure implements Figure {
     }
 
     @Override
-    public String getMove() {
-        return move;
+    public void setTrace(String[] trace_arguments) {
+        trace.add(0,0);
     }
 
     @Override
-    public String getTrace() {
+    public List<Integer> getTrace() {
         return this.trace;
     }
 
@@ -61,6 +64,6 @@ public class CellFigure implements Figure {
         this.name = "Cell";
         this.attack = 0;
         this.defense = 0;
-        this.trace = "Stand";
+        this.trace.add(0,0);
     }
 }

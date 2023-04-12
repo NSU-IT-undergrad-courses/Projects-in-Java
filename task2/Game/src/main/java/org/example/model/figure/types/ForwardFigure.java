@@ -2,6 +2,9 @@ package org.example.model.figure.types;
 
 import org.example.model.figure.Figure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ForwardFigure implements Figure {
     public ForwardFigure(String name, Integer attack, Integer defense){
         this.name = name;
@@ -18,9 +21,7 @@ public class ForwardFigure implements Figure {
     private Integer attack;
     private Integer defense;
 
-    private String move;
-
-    private String trace;
+    private List<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {
@@ -53,13 +54,16 @@ public class ForwardFigure implements Figure {
     }
 
     @Override
-    public String getMove() {
-        return move;
+    public void setTrace(String[] trace_arguments) {
+        for (int i = 0; i < trace_arguments.length; i++){
+            Integer move = Integer.valueOf(trace_arguments[i]);
+            this.trace.add(move);
+        }
     }
 
     @Override
-    public String getTrace() {
-        return "Diagonal";
+    public List<Integer> getTrace() {
+        return this.trace;
     }
 
 }

@@ -1,15 +1,15 @@
 package org.example;
 
 import org.example.controller.ChessGameController;
-import org.example.observer.Observer;
-import org.example.view.ChessViewController;
-import org.example.view.GameView;
+import org.example.view.viewcomponent.ChessViewComponent;
 
 class Main {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         ChessGameController Controller = new ChessGameController();
-        GameView ViewComponent = new ChessViewController();
-        Controller.register((Observer) ViewComponent);
+        ChessViewComponent ViewComponent = new ChessViewComponent();
+        Controller.register(ViewComponent);
+        ViewComponent.register(Controller);
         Controller.Start();
+        Controller.StartGame();
     }
 }

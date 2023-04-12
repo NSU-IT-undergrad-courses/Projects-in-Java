@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ObservableImpl implements Observable {
 
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
 
     @Override
     public void register(Observer o) {

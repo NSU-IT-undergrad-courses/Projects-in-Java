@@ -2,21 +2,27 @@ package org.example.model.figure.types;
 
 import org.example.model.figure.Figure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DiagonalFigure implements Figure {
+    public DiagonalFigure() {
+        this.name = "NONDEFINED";
+        this.attack = 0;
+        this.defense = 0;
+    }
+
     public DiagonalFigure(String name, Integer attack, Integer defense){
         this.name = name;
         this.attack = attack;
         this.defense = defense;
-        this.trace = "Diagonal";
     }
 
     private String name;
     private Integer attack;
     private Integer defense;
 
-    private String move;
-
-    private String trace;
+    private List<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {
@@ -49,12 +55,16 @@ public class DiagonalFigure implements Figure {
     }
 
     @Override
-    public String getMove() {
-        return move;
+    public void setTrace(String[] trace_arguments) {
+        for (int i = 0; i < trace_arguments.length; i++){
+            Integer move = Integer.valueOf(trace_arguments[i]);
+            Integer value = move * 10 + move;
+            this.trace.add(value);
+        }
     }
 
     @Override
-    public String getTrace() {
+    public List<Integer> getTrace() {
         return this.trace;
     }
 

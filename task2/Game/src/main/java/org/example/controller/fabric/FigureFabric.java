@@ -5,9 +5,7 @@ import org.example.model.figure.Figure;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class FigureFabric {
     Properties types = new Properties();
@@ -20,7 +18,7 @@ public class FigureFabric {
         }
     }
 
-    public Figure create(String line) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public Figure create(String line) {
         String [] arguments = line.split("#");
         String type = arguments[3];
         try{
@@ -30,6 +28,8 @@ public class FigureFabric {
             fig.setName(arguments[0]);
             fig.setAttack(Integer.valueOf(arguments[1]));
             fig.setDefense(Integer.valueOf(arguments[2]));
+            String [] trace = arguments[4].split(" ");
+            fig.setTrace(trace);
             return fig;
         }catch(Exception e){
             throw new RuntimeException(line);

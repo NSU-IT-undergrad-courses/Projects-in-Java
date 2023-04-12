@@ -1,18 +1,20 @@
 package org.example.model.figure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface Figure {
-    public String getName();
-    public void setName(String name);
+    String getName();
+    void setName(String name);
 
-    public void setAttack(Integer attack_value);
-    public Integer getAttack();
+    void setAttack(Integer attack_value);
+    Integer getAttack();
 
-    public void setDefense(Integer defense_value);
-    public Integer getDefense();
+    void setDefense(Integer defense_value);
+    Integer getDefense();
 
-    public String getMove();
-
-    public String getTrace();
+    void setTrace(String [] trace_arguments);
+    List<Integer> getTrace();
 
 
 }
