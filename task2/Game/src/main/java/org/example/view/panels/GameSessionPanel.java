@@ -39,6 +39,10 @@ public class GameSessionPanel extends JPanel implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
+            if (e instanceof  ClearMovesEvent){
+                DefaultAppearance();
+            }
+
             if (e instanceof MovesMessageEvent) {
                 int index = ((MovesMessageEvent) e).getIndex();
                 figures[index].setBackground(Color.CYAN);
@@ -93,6 +97,17 @@ public class GameSessionPanel extends JPanel implements Observer {
             }
             if (e instanceof ReleaseStatsEvent) {
                 Stats.dispose();
+            }
+        }
+    }
+
+    private void DefaultAppearance() {
+        for (int i = 0; i < 64; i++){
+            if ((i + i/8)%2  == 0) {
+                figures[i].setBackground(Color.gray);
+            }
+            else{
+                figures[i].setBackground(Color.white);
             }
         }
     }

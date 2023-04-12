@@ -11,9 +11,12 @@ import org.example.observer.event.Event;
 import org.example.observer.event.GameStartEvent;
 import org.example.observer.event.session.*;
 
+import javax.sound.sampled.*;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ChessGameController extends ObservableImpl implements Observer {
@@ -36,6 +39,28 @@ public class ChessGameController extends ObservableImpl implements Observer {
     }
 
     public void StartGame() {
+        Clip clip = null;
+        try {
+            clip = AudioSystem.getClip();
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+        AudioInputStream inputStream = null;
+        try {
+            inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/game.wav")));
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            clip.open(inputStream);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        clip.start();
         Board = loadBoard("/saved/default.txt");
         String[] names = new String[64];
         for (int i = 0; i < 8; i++) {
