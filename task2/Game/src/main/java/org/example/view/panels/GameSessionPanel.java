@@ -8,6 +8,8 @@ import org.example.view.listener.GameSessionMouseListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,6 +20,8 @@ public class GameSessionPanel extends JPanel implements Observer {
     ArrayList<GameSessionMouseListener> listeners = new ArrayList<GameSessionMouseListener>(64);
     JButton[] figures = new JButton[64];
     private JWindow Stats = new JWindow();
+    private JFrame Log = new JFrame();
+    private JTextArea display  = new JTextArea();
     private String[] names = new String[64];
 
     public GameSessionPanel() {
@@ -28,6 +32,20 @@ public class GameSessionPanel extends JPanel implements Observer {
             listeners.add(i, new GameSessionMouseListener());
             listeners.get(i).setIndex(i);
         }
+        PlaceLogWindows();
+    }
+
+    private void PlaceLogWindows() {
+        // create the middle panel components
+        this.display = new JTextArea(16, 58);
+        display.setEditable(false); // set textArea non-editable
+        JScrollPane scroll = new JScrollPane(display);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        Log.setVisible(true);
+        //Add Textarea in to middle panel
+        Log.add(scroll);
+        Log.setBounds(0,400,200,500);
+        Log.setVisible(true);
     }
 
     public void register(Observer o) {
@@ -41,6 +59,11 @@ public class GameSessionPanel extends JPanel implements Observer {
         if (e instanceof GameSessionEvent) {
             if (e instanceof  ClearMovesEvent){
                 DefaultAppearance();
+            }
+            if (e instanceof  FigureChosen){
+                int index = ((FigureChosen) e).getIndex();
+                figures[index].setBackground(Color.CYAN);
+
             }
 
             if (e instanceof MovesMessageEvent) {

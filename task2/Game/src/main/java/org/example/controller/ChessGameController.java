@@ -23,6 +23,16 @@ public class ChessGameController extends ObservableImpl implements Observer {
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
 
+    public List<Integer> getFiguresToMove() {
+        return FiguresToMove;
+    }
+
+    public void addFiguresToMove(Integer figure) {
+        FiguresToMove.add(figure);
+    }
+
+    private List<Integer> FiguresToMove = new ArrayList<Integer>();
+
     public ChessGameController() {
 
     }
@@ -94,6 +104,12 @@ public class ChessGameController extends ObservableImpl implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
+            if (e instanceof  FigureChosen){
+                addFiguresToMove(((FigureChosen) e).getIndex());
+                if (getFiguresToMove().size() == 2){
+                    if()
+                }
+            }
             if (e instanceof RequestStatsEvent) {
                 Integer width = ((RequestStatsEvent) e).getFigureNumber();
                 Integer height = width / 8;

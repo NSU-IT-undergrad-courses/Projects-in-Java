@@ -2,10 +2,7 @@ package org.example.view.listener;
 
 import org.example.observer.Observable;
 import org.example.observer.ObservableImpl;
-import org.example.observer.event.session.ClearMovesEvent;
-import org.example.observer.event.session.ReleaseStatsEvent;
-import org.example.observer.event.session.RequestMovesEvent;
-import org.example.observer.event.session.RequestStatsEvent;
+import org.example.observer.event.session.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,7 +21,8 @@ public class GameSessionMouseListener extends ObservableImpl implements MouseLis
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2){
-            System.out.println("Choose");
+            notify(new FigureChosen(getIndex()));
+            notify(new RequestMovesEvent(getIndex()));
         }
     }
 
