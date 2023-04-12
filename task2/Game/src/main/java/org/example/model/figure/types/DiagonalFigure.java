@@ -12,7 +12,7 @@ public class DiagonalFigure implements Figure {
         this.defense = 0;
     }
 
-    public DiagonalFigure(String name, Integer attack, Integer defense){
+    public DiagonalFigure(String name, Integer attack, Integer defense) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
@@ -56,10 +56,16 @@ public class DiagonalFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        for (int i = 0; i < trace_arguments.length; i++){
+        for (int i = 0; i < trace_arguments.length; i++) {
             Integer move = Integer.valueOf(trace_arguments[i]);
-            Integer value = move * 10 + move;
-            this.trace.add(value);
+            this.trace.add(move);
+            this.trace.add(move);
+            this.trace.add(-move);
+            this.trace.add(move);
+            this.trace.add(move);
+            this.trace.add(-move);
+            this.trace.add(-move);
+            this.trace.add(-move);
         }
     }
 

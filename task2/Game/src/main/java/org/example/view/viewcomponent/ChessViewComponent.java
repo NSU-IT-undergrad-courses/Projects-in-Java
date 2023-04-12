@@ -10,18 +10,20 @@ import org.example.observer.event.session.ReleaseStatsEvent;
 import org.example.observer.event.session.StatsMessageEvent;
 import org.example.view.Panels;
 import org.example.view.panels.GameSessionPanel;
-import org.example.view.panels.MainScreenPanel;
+import org.example.view.panels.MainScreenPanelTEMP;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChessViewComponent extends JFrame implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
-    MainScreenPanel mainscreen = new MainScreenPanel();
+    MainScreenPanelTEMP mainscreen = new MainScreenPanelTEMP();
     GameSessionPanel gamesession = new GameSessionPanel();
     JFrame frame = new JFrame();
 
@@ -31,13 +33,15 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
             PlaceMainScreen();
         }
         if (e instanceof GameSessionEvent) {
-            if (e instanceof  GameSessionStartEvent){
+            if (e instanceof GameSessionStartEvent) {
                 PlaceGameSession();
-            }
-            if (e instanceof StatsMessageEvent){
                 gamesession.handle(e);
-            }
-            if (e instanceof ReleaseStatsEvent){
+                this.pack();
+            } else if (e instanceof StatsMessageEvent) {
+                gamesession.handle(e);
+            } else if (e instanceof ReleaseStatsEvent) {
+                gamesession.handle(e);
+            } else {
                 gamesession.handle(e);
             }
         }
@@ -46,19 +50,23 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
     public ChessViewComponent() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
+        frame.setTitle("ChessRPG");
         frame.setUndecorated(true);
         frame.setSize(new Dimension(Panels.getX(), Panels.getY()));
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(x, y);
-        URL icon_link = null;
+        BufferedImage logo = null;
         try {
-            icon_link = new URL("https://w7.pngwing.com/pngs/629/63/png-transparent-the-red-lion-logo-hotel-roar-lion-fitness-animals-carnivoran.png");
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            logo = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/logo.png")));
+        } catch (IOException exc) {
+            exc.printStackTrace();
         }
-        Image icon = new ImageIcon(icon_link).getImage();
-        frame.setIconImage(icon);
+        assert logo != null;
+        Image imagelogo = logo.getScaledInstance(20, 20,
+                Image.SCALE_FAST);
+        ImageIcon nameimage = new ImageIcon(imagelogo);
+        frame.setIconImage(nameimage.getImage());
         frame.setVisible(true);
     }
 

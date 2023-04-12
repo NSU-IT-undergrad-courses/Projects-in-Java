@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineFigure implements Figure {
-    public LineFigure(String name, Integer attack, Integer defense){
+    public LineFigure(String name, Integer attack, Integer defense) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
@@ -56,9 +56,12 @@ public class LineFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        for (int i = 0; i < trace_arguments.length; i++){
+        for (int i = 0; i < trace_arguments.length; i++) {
             Integer move = Integer.valueOf(trace_arguments[i]);
+            this.trace.add(0);
             this.trace.add(move);
+            this.trace.add(0);
+            this.trace.add(-move);
         }
     }
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HorseFigure implements Figure {
-    public HorseFigure(String name, Integer attack, Integer defense){
+    public HorseFigure(String name, Integer attack, Integer defense) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
@@ -55,8 +55,31 @@ public class HorseFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        this.trace.add(23);
-        this.trace.add(32);
+        this.trace.add(1);
+        this.trace.add(2);
+
+        this.trace.add(-1);
+        this.trace.add(2);
+
+        this.trace.add(1);
+        this.trace.add(-2);
+
+        this.trace.add(-1);
+        this.trace.add(-2);
+
+
+        this.trace.add(2);
+        this.trace.add(1);
+
+        this.trace.add(-2);
+        this.trace.add(1);
+
+        this.trace.add(2);
+        this.trace.add(-1);
+
+        this.trace.add(-2);
+        this.trace.add(-1);
+
     }
 
 

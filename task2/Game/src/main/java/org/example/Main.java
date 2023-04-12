@@ -9,7 +9,6 @@ class Main {
         ChessViewComponent ViewComponent = new ChessViewComponent();
         Controller.register(ViewComponent);
         ViewComponent.register(Controller);
-        Controller.Start();
         Controller.StartGame();
     }
 }

@@ -1,18 +1,18 @@
 package org.example.model.figure.types;
+
 import org.example.model.figure.Figure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CrosshairFigure implements Figure {
-    public CrosshairFigure(String name, Integer attack, Integer defense){
+    public CrosshairFigure(String name, Integer attack, Integer defense) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
     }
 
-    public CrosshairFigure(){
+    public CrosshairFigure() {
         this.name = "NONDEFINED";
         this.attack = 0;
         this.defense = 0;
@@ -56,11 +56,17 @@ public class CrosshairFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-            for (int i = 0; i < trace_arguments.length; i++){
-                Integer move = Integer.valueOf(trace_arguments[i]);
-                this.trace.add(move*10);
-                this.trace.add(move);
-            }
+        for (int i = 0; i < trace_arguments.length; i++) {
+            Integer move = Integer.valueOf(trace_arguments[i]);
+            this.trace.add(move);
+            this.trace.add(0);
+            this.trace.add(-move);
+            this.trace.add(0);
+            this.trace.add(0);
+            this.trace.add(move);
+            this.trace.add(0);
+            this.trace.add(-move);
+        }
     }
 
     @Override

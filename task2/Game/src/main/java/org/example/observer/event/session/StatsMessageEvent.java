@@ -1,6 +1,6 @@
 package org.example.observer.event.session;
 
-public class StatsMessageEvent extends GameSessionEvent{
+public class StatsMessageEvent extends GameSessionEvent {
     @Override
     public String getName() {
         return name;

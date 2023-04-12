@@ -5,11 +5,11 @@ import org.example.model.figure.types.CellFigure;
 
 import java.util.ArrayList;
 
-public class ChessBoard implements board{
+public class ChessBoard implements board {
     public ChessBoard() {
         Figure fig = new CellFigure();
         this.board = new ArrayList<>(64);
-        for (int i = 0; i<64;i++){
+        for (int i = 0; i < 64; i++) {
             board.add(fig);
         }
     }
@@ -30,13 +30,14 @@ public class ChessBoard implements board{
         }
         //else Exception
     }
+
     @Override
     public void setPlace(int length_value, int width_value, Figure fig) {
-            board.set(length_value+width_value*width, fig);
+        board.set(length_value + width_value * width, fig);
     }
 
     @Override
     public Figure getPlace(int length_value, int width_value) {
-        return board.get(length_value+width_value*width);
+        return board.get(length_value + width_value * width);
     }
 }

@@ -1,8 +1,5 @@
 package org.example.view.panels;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.session.*;
@@ -17,42 +14,76 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class GameSessionPanel extends JPanel implements Observer{
+public class GameSessionPanel extends JPanel implements Observer {
     ArrayList<GameSessionMouseListener> listeners = new ArrayList<GameSessionMouseListener>(64);
+    JButton[] figures = new JButton[64];
     private JWindow Stats = new JWindow();
-    private String [] names = new String [64];
-    public GameSessionPanel() {
-        this.setSize(Panels.getX(),Panels.getY());
-        this.setPreferredSize(new Dimension(Panels.getX(), Panels.getY()));
-        setLayout(new GridLayout(8,8,5,5));
-        for (int i  = 0; i < 64; i++){
-            listeners.add(i,new GameSessionMouseListener());
-            listeners.get(i).setIndex(i);
-            listeners.get(i).notify( new RequestName(i));
-//            JButton btn = createFigure("","/images/figures/"+names[i]+".png");
-            JButton btn = new JButton();
-            btn.setPreferredSize(new Dimension(50,50));
-            btn.addMouseListener(listeners.get(i));
-            this.add(btn);
+    private String[] names = new String[64];
 
+    public GameSessionPanel() {
+        this.setSize(Panels.getX(), Panels.getY());
+        this.setPreferredSize(new Dimension(Panels.getX(), Panels.getY()));
+        setLayout(new GridLayout(8, 8, 5, 5));
+        for (int i = 0; i < 64; i++) {
+            listeners.add(i, new GameSessionMouseListener());
+            listeners.get(i).setIndex(i);
         }
     }
-    public void register(Observer o){
-        for (int i = 0; i < 64; i++){
-        listeners.get(i).register(o);
+
+    public void register(Observer o) {
+        for (int i = 0; i < 64; i++) {
+            listeners.get(i).register(o);
         }
     }
 
     @Override
     public void handle(Event e) {
-        if (e instanceof GameSessionEvent){
-            if (e instanceof StatsMessageEvent){
+        if (e instanceof GameSessionEvent) {
+            if (e instanceof MovesMessageEvent) {
+                int index = ((MovesMessageEvent) e).getIndex();
+                figures[index].setBackground(Color.CYAN);
+                Integer[] moves = ((MovesMessageEvent) e).getMoves().toArray(new Integer[0]);
+                for (int i = 0; i < moves.length; i += 2) {
+                    Integer x = moves[i];
+                    Integer y = moves[i + 1];
+                    figures[y * 8 + x].setBackground(Color.green);
+                }
+            }
+            if (e instanceof GameSessionStartEvent) {
+                this.names = ((GameSessionStartEvent) e).getFiguresNames();
+                for (int i = 0; i < 64; i++) {
+                    JButton btn;
+                    if (Objects.equals(names[i], "cell")) {
+                        if ((i + i / 8) % 2 == 0) {
+                            btn = createFigure("", "/images/figures/" + "white" + names[i] + ".png");
+                        } else {
+                            btn = createFigure("", "/images/figures/" + "black" + names[i] + ".png");
+                        }
+                    } else {
+                        if (Objects.equals(names[i], "queen")) {
+                            btn = createFigure("", "/images/figures/" + names[i] + "dance.gif");
+                        } else
+                            btn = createFigure("", "/images/figures/" + names[i] + ".png");
+                    }
+                    btn.setSize(new Dimension(50, 50));
+                    btn.setPreferredSize(new Dimension(50, 50));
+                    btn.addMouseListener(listeners.get(i));
+                    if ((i + i / 8) % 2 == 0) {
+                        btn.setBackground(Color.gray);
+                    } else {
+                        btn.setBackground(Color.white);
+                    }
+                    figures[i] = btn;
+                    this.add(figures[i]);
+                }
+            }
+            if (e instanceof StatsMessageEvent) {
                 Stats = new JWindow();
-                JLabel name = createLabel("Name: "+e.getName(),"/images/stats/name.png");
-                JLabel attack = createLabel("Attack: "+((StatsMessageEvent) e).getAttack(),"/images/stats/attack.png");
-                JLabel defense = createLabel("Defense: "+((StatsMessageEvent) e).getDefense(),"/images/stats/defense.png");
+                JLabel name = createLabel("Name: " + e.getName(), "/images/stats/name.png");
+                JLabel attack = createLabel("Attack: " + ((StatsMessageEvent) e).getAttack(), "/images/stats/attack.png");
+                JLabel defense = createLabel("Defense: " + ((StatsMessageEvent) e).getDefense(), "/images/stats/defense.png");
                 Stats.setLayout(new FlowLayout());
-                Stats.setPreferredSize(new Dimension(150,100));
+                Stats.setPreferredSize(new Dimension(150, 100));
                 Stats.setBackground(Color.ORANGE);
                 Stats.add(name);
                 Stats.add(attack);
@@ -60,16 +91,13 @@ public class GameSessionPanel extends JPanel implements Observer{
                 Stats.pack();
                 Stats.setVisible(true);
             }
-            if (e instanceof ReleaseStatsEvent){
+            if (e instanceof ReleaseStatsEvent) {
                 Stats.dispose();
-            }
-            if (e instanceof NamesMessageEvent){
-                names = ((NamesMessageEvent) e).getNames();
             }
         }
     }
 
-    private JLabel createLabel(String text, String path){
+    private JLabel createLabel(String text, String path) {
         BufferedImage name = null;
         try {
             name = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
@@ -77,15 +105,14 @@ public class GameSessionPanel extends JPanel implements Observer{
             exc.printStackTrace();
         }
         assert name != null;
-        Image dimg = name.getScaledInstance(20,20,
-                Image.SCALE_SMOOTH);
+        Image dimg = name.getScaledInstance(20, 20,
+                Image.SCALE_FAST);
         ImageIcon nameimage = new ImageIcon(dimg);
-        JLabel line = new JLabel(text, nameimage,SwingConstants.LEFT);
+        JLabel line = new JLabel(text, nameimage, SwingConstants.CENTER);
         return line;
     }
 
-    private JButton createFigure(String text, String path){
-        System.out.println(path+"bruh");
+    private JButton createFigure(String text, String path) {
         BufferedImage name = null;
         try {
             name = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
@@ -93,7 +120,7 @@ public class GameSessionPanel extends JPanel implements Observer{
             exc.printStackTrace();
         }
         assert name != null;
-        Image dimg = name.getScaledInstance(50,50,
+        Image dimg = name.getScaledInstance(50, 50,
                 Image.SCALE_SMOOTH);
         ImageIcon nameimage = new ImageIcon(dimg);
         JButton line = new JButton(text, nameimage);

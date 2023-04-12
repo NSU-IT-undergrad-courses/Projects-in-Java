@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CellFigure implements Figure {
-    public CellFigure(String name, Integer attack, Integer defense){
+    public CellFigure(String name, Integer attack, Integer defense) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
@@ -52,7 +52,7 @@ public class CellFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        trace.add(0,0);
+        trace.add(0, 0);
     }
 
     @Override
@@ -64,6 +64,6 @@ public class CellFigure implements Figure {
         this.name = "Cell";
         this.attack = 0;
         this.defense = 0;
-        this.trace.add(0,0);
+        this.trace.add(0, 0);
     }
 }

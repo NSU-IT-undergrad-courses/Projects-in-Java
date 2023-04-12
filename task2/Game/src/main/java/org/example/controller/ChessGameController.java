@@ -1,7 +1,8 @@
 package org.example.controller;
 
 import org.example.controller.fabric.FigureFabric;
-import org.example.model.board.*;
+import org.example.model.board.ChessBoard;
+import org.example.model.board.board;
 import org.example.model.figure.Figure;
 import org.example.model.figure.types.CellFigure;
 import org.example.observer.ObservableImpl;
@@ -12,7 +13,7 @@ import org.example.observer.event.session.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class ChessGameController extends ObservableImpl implements Observer {
@@ -40,10 +41,8 @@ public class ChessGameController extends ObservableImpl implements Observer {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 names[i * 8 + j] = Board.getPlace(j, i).getName();
-                System.out.println("Bruhma"+Board.getPlace(j, i).getName());
             }
         }
-        System.out.println(Arrays.toString(names));
         notify(new NamesMessageEvent(names));
         notify(new GameSessionStartEvent(names));
     }
@@ -69,23 +68,44 @@ public class ChessGameController extends ObservableImpl implements Observer {
 
     @Override
     public void handle(Event e) {
-        if (e instanceof GameSessionEvent){
-            if (e instanceof RequestStatsEvent){
-                Integer width =((RequestStatsEvent) e).getFigureNumber();
-                Integer height = width/8;
-                width %=8;
-                if ( Board.getPlace(width, height)  instanceof CellFigure){
+        if (e instanceof GameSessionEvent) {
+            if (e instanceof RequestStatsEvent) {
+                Integer width = ((RequestStatsEvent) e).getFigureNumber();
+                Integer height = width / 8;
+                width %= 8;
+                if (Board.getPlace(width, height) instanceof CellFigure) {
 
+                } else {
+                    String name = Board.getPlace(width, height).getName();
+                    Integer attack = Board.getPlace(width, height).getAttack();
+                    Integer defense = Board.getPlace(width, height).getDefense();
+                    notify(new StatsMessageEvent(name, attack, defense));
                 }
-                else{
-                String name = Board.getPlace(width, height).getName();
-                Integer attack = Board.getPlace(width, height).getAttack();
-                Integer defense =  Board.getPlace(width, height).getDefense();
-                notify( new StatsMessageEvent(name,attack,defense));
-                }
+            }
+            if (e instanceof RequestMovesEvent) {
+                int value = ((RequestMovesEvent) e).getFigure_number();
+                int length = value % 8;
+                int width = value / 8;
+                Figure fig = Board.getPlace(length, width);
+                notify(new MovesMessageEvent(value, CalculateAvailableMoves(fig, length, width)));
             }
 
         }
 
     }
+
+    private List<Integer> CalculateAvailableMoves(Figure fig, int length, int width) {
+        List<Integer> moves = new ArrayList<Integer>();
+        for (int i = 0; i < fig.getTrace().size(); i += 2) {
+            Integer a = length + fig.getTrace().get(i);
+            Integer b = width + fig.getTrace().get(i + 1);
+            if (a >= 0 && a < 8 && b > -1 && b < 8) {
+                moves.add(a);
+                moves.add(b);
+            }
+        }
+        return moves;
+    }
+
+
 }

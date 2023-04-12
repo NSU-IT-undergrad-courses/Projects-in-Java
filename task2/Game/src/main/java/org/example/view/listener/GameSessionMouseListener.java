@@ -19,9 +19,9 @@ public class GameSessionMouseListener extends ObservableImpl implements MouseLis
     }
 
     private Integer index;
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println(e.getSource());
         notify(new RequestMovesEvent(getIndex()));
     }
 
@@ -32,12 +32,10 @@ public class GameSessionMouseListener extends ObservableImpl implements MouseLis
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        System.out.println("Нажали "+getIndex());
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("Навели на "+getIndex());
         notify(new RequestStatsEvent(getIndex()));
     }
 

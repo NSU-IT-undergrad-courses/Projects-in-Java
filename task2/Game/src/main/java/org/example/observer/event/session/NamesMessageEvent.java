@@ -1,6 +1,6 @@
 package org.example.observer.event.session;
 
-public class NamesMessageEvent extends GameSessionEvent{
+public class NamesMessageEvent extends GameSessionEvent {
     public String[] getNames() {
         return names;
     }
@@ -9,7 +9,7 @@ public class NamesMessageEvent extends GameSessionEvent{
         this.names = names;
     }
 
-    String [] names = new String [64];
+    String[] names = new String[64];
 
     public NamesMessageEvent(String[] names) {
         this.names = names;

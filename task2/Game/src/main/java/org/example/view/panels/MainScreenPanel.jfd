@@ -1,0 +1,55 @@
+JFDML JFormDesigner: "8.0.3.0.246" Java: "17.0.5" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:28:p, par l {comp Quit:::p:253:p, comp Profiles:::::x}, par l {seq {space :p:55:p, par t {comp Offline:::p:229:p, comp Team:::p:229:p}, space :p:29:p, par l {comp Online:::p:186:p, comp Faq:::::x}, space ::495:x}, seq t {space ::384:x, comp Git:::p::p, space :::p, comp Scores:::p::p, space :::p, comp Creator:::p::p, space :p:339:p}}}}"
+			"$verticalGroup": "par l {seq t {par l {seq {space :p:227:p, par b {comp Offline::b:p:66:p, comp Online::b:p:66:p}}, seq l {space :p:230:p, comp Profiles:::p::p}}, space :::p, par l {comp Faq:::p::p, comp Team:::p::p}, space ::348:x, par l {comp Quit:::p:104:p, par b {comp Git::b:p::p, comp Scores::b:p::p, comp Creator::b:p::p}}, space :p:19:p}}"
+		} ) {
+			name: "this"
+			"maximumSize": new java.awt.Dimension( 1280, 800 )
+			"minimumSize": new java.awt.Dimension( 1280, 800 )
+			"preferredSize": new java.awt.Dimension( 1280, 800 )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Quit"
+				"text": "Quit"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Profiles"
+				"text": "Profiles"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Offline"
+				"text": "OFFLINE"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Online"
+				"text": "ONLINE"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Team"
+				"text": "Team"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Faq"
+				"text": "FAQ"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Git"
+				"text": "GIT"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Scores"
+				"text": "SCORES"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "Creator"
+				"text": "CREATOR"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 1275, 800 )
+		} )
+	}
+}

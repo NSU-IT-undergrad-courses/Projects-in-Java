@@ -6,17 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForwardFigure implements Figure {
-    public ForwardFigure(String name, Integer attack, Integer defense){
+    public ForwardFigure(String name, Integer attack, Integer defense) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
     }
 
-    public ForwardFigure(){
+    public ForwardFigure() {
         this.name = "NOTFOUND";
         this.attack = 0;
         this.defense = 0;
     }
+
     private String name;
     private Integer attack;
     private Integer defense;
@@ -55,8 +56,9 @@ public class ForwardFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        for (int i = 0; i < trace_arguments.length; i++){
+        for (int i = 0; i < trace_arguments.length; i++) {
             Integer move = Integer.valueOf(trace_arguments[i]);
+            this.trace.add(0);
             this.trace.add(move);
         }
     }
