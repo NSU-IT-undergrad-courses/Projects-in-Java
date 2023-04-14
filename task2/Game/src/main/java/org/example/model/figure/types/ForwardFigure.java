@@ -6,10 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForwardFigure implements Figure {
-    public ForwardFigure(String name, Integer attack, Integer defense) {
+    public Integer getWhite() {
+        return isWhite;
+    }
+
+    public void setWhite(Integer white) {
+        isWhite = white;
+    }
+
+    private Integer isWhite;
+
+    public ForwardFigure(String name, Integer attack, Integer defense, Integer isWhite) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
+        this.isWhite = isWhite;
     }
 
     public ForwardFigure() {
@@ -52,6 +63,11 @@ public class ForwardFigure implements Figure {
     @Override
     public Integer getDefense() {
         return defense;
+    }
+
+    @Override
+    public Integer isWhite() {
+        return isWhite;
     }
 
     @Override

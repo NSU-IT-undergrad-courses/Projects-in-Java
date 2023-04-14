@@ -6,16 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DiagonalFigure implements Figure {
+    public Integer getWhite() {
+        return isWhite;
+    }
+
+    public void setWhite(Integer white) {
+        isWhite = white;
+    }
+
+    public void setTrace(List<Integer> trace) {
+        this.trace = trace;
+    }
+
+    private Integer isWhite;
+
     public DiagonalFigure() {
         this.name = "NONDEFINED";
         this.attack = 0;
         this.defense = 0;
     }
 
-    public DiagonalFigure(String name, Integer attack, Integer defense) {
+    public DiagonalFigure(String name, Integer attack, Integer defense, Integer isWhite) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
+        this.isWhite = isWhite;
     }
 
     private String name;
@@ -52,6 +67,11 @@ public class DiagonalFigure implements Figure {
     @Override
     public Integer getDefense() {
         return defense;
+    }
+
+    @Override
+    public Integer isWhite() {
+        return isWhite;
     }
 
     @Override

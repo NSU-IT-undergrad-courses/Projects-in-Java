@@ -51,6 +51,16 @@ public class CellFigure implements Figure {
     }
 
     @Override
+    public Integer isWhite() {
+        return null;
+    }
+
+    @Override
+    public void setWhite(Integer isWhite) {
+
+    }
+
+    @Override
     public void setTrace(String[] trace_arguments) {
         trace.add(0, 0);
     }

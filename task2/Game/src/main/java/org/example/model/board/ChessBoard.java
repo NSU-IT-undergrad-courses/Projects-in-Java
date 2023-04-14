@@ -40,4 +40,9 @@ public class ChessBoard implements board {
     public Figure getPlace(int length_value, int width_value) {
         return board.get(length_value + width_value * width);
     }
+
+    @Override
+    public Figure getPlace(int index) {
+        return board.get(index);
+    }
 }

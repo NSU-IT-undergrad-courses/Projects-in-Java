@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrosshairFigure implements Figure {
-    public CrosshairFigure(String name, Integer attack, Integer defense) {
+    public CrosshairFigure(String name, Integer attack, Integer defense, Integer isWhite) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
@@ -21,6 +21,16 @@ public class CrosshairFigure implements Figure {
     private String name;
     private Integer attack;
     private Integer defense;
+
+    public Integer getWhite() {
+        return isWhite;
+    }
+
+    public void setWhite(Integer white) {
+        isWhite = white;
+    }
+
+    private Integer isWhite;
     private final List<Integer> trace = new ArrayList<Integer>();
 
     @Override
@@ -51,6 +61,11 @@ public class CrosshairFigure implements Figure {
     @Override
     public Integer getDefense() {
         return defense;
+    }
+
+    @Override
+    public Integer isWhite() {
+        return isWhite;
     }
 
 

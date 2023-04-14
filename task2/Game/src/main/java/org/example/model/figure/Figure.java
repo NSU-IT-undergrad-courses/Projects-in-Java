@@ -15,6 +15,10 @@ public interface Figure {
 
     Integer getDefense();
 
+    Integer isWhite();
+
+    void setWhite(Integer isWhite);
+
     void setTrace(String[] trace_arguments);
 
     List<Integer> getTrace();

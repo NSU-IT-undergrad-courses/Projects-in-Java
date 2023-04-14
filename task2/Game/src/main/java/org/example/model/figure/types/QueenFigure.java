@@ -6,16 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QueenFigure implements Figure {
+    public Integer getWhite() {
+        return isWhite;
+    }
+
+    public void setWhite(Integer white) {
+        isWhite = white;
+    }
+
+    private Integer isWhite;
+
     public QueenFigure() {
         this.name = "NONDEFINED";
         this.attack = 0;
         this.defense = 0;
     }
 
-    public QueenFigure(String name, Integer attack, Integer defense) {
+    public QueenFigure(String name, Integer attack, Integer defense, Integer isWhite) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
+        this.isWhite = isWhite;
     }
 
     private String name;
@@ -52,6 +63,11 @@ public class QueenFigure implements Figure {
     @Override
     public Integer getDefense() {
         return defense;
+    }
+
+    @Override
+    public Integer isWhite() {
+        return isWhite;
     }
 
     @Override

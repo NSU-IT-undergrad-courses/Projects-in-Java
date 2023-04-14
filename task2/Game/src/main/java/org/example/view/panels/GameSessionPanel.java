@@ -68,7 +68,6 @@ public class GameSessionPanel extends JPanel implements Observer {
             }
             if (e instanceof FigureKilledEvent){
                 names[((FigureKilledEvent) e).getDestination()] = ((FigureKilledEvent) e).getDestination_name();
-//                System.out.println(names[((FigureKilledEvent) e).getDestination()]+((FigureKilledEvent) e).getSource_name());
                 names[((FigureKilledEvent) e).getSource()] = "cell";
                 figures[((FigureKilledEvent) e).getSource()] = CreateFigure(((FigureKilledEvent) e).getSource());
                 figures[((FigureKilledEvent) e).getDestination()] = CreateFigure(((FigureKilledEvent) e).getDestination());
