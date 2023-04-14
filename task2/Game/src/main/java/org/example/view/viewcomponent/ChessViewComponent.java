@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class ChessViewComponent extends JFrame implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
@@ -34,9 +35,13 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
         }
         if (e instanceof GameSessionEvent) {
             if (e instanceof GameSessionStartEvent) {
-                PlaceGameSession();
                 gamesession.handle(e);
-                this.pack();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(50);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+                PlaceGameSession();
             } else if (e instanceof StatsMessageEvent) {
                 gamesession.handle(e);
             } else if (e instanceof ReleaseStatsEvent) {
@@ -45,6 +50,7 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
                 gamesession.handle(e);
             }
         }
+        this.pack();
     }
 
     public ChessViewComponent() {
@@ -67,7 +73,6 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
                 Image.SCALE_FAST);
         ImageIcon nameimage = new ImageIcon(imagelogo);
         frame.setIconImage(nameimage.getImage());
-        frame.setVisible(true);
     }
 
     public void PlaceMainScreen() {
@@ -79,6 +84,7 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
         frame.remove(mainscreen);
         frame.add(gamesession);
         frame.pack();
+        frame.setVisible(true);
     }
 
     @Override

@@ -8,8 +8,6 @@ import org.example.view.listener.GameSessionMouseListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,7 +19,6 @@ public class GameSessionPanel extends JPanel implements Observer {
     JButton[] figures = new JButton[64];
     private JWindow Stats = new JWindow();
     private JFrame Log = new JFrame();
-    private JTextArea display  = new JTextArea();
     private String[] names = new String[64];
 
     public GameSessionPanel() {
@@ -32,20 +29,6 @@ public class GameSessionPanel extends JPanel implements Observer {
             listeners.add(i, new GameSessionMouseListener());
             listeners.get(i).setIndex(i);
         }
-        PlaceLogWindows();
-    }
-
-    private void PlaceLogWindows() {
-        // create the middle panel components
-        this.display = new JTextArea(16, 58);
-        display.setEditable(false); // set textArea non-editable
-        JScrollPane scroll = new JScrollPane(display);
-        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        Log.setVisible(true);
-        //Add Textarea in to middle panel
-        Log.add(scroll);
-        Log.setBounds(0,400,200,500);
-        Log.setVisible(true);
     }
 
     public void register(Observer o) {
@@ -62,13 +45,42 @@ public class GameSessionPanel extends JPanel implements Observer {
             }
             if (e instanceof  FigureChosen){
                 int index = ((FigureChosen) e).getIndex();
-                figures[index].setBackground(Color.CYAN);
+//                figures[index].setBackground(Color.CYAN);
 
             }
-
+            if (e instanceof  FailedAttackEvent){
+                JDialog fail = new JDialog();
+                fail.setPreferredSize(new Dimension(400,100));
+                fail.setLocation(Panels.getX()/2,Panels.getY());
+                fail.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                String message1 = "Yours figure failed to kill "+e.getName()+" due to low attack💩\n";
+                String message2 = "!!!"+e.getName()+": "+((FailedAttackEvent) e).getDamage()+"!!!!";
+                fail.add(new JTextArea(message1+message2));
+            }
+            if (e instanceof  CantPerformMoveEvent){
+                JDialog fail = new JDialog();
+                fail.setPreferredSize(new Dimension(400,100));
+                fail.setLocation(Panels.getX()/2,Panels.getY()-200);
+                fail.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                fail.add(new JTextArea("Can't peform this move!!!"));
+                fail.pack();
+                fail.setVisible(true);
+            }
+            if (e instanceof FigureKilledEvent){
+                names[((FigureKilledEvent) e).getDestination()] = ((FigureKilledEvent) e).getDestination_name();
+//                System.out.println(names[((FigureKilledEvent) e).getDestination()]+((FigureKilledEvent) e).getSource_name());
+                names[((FigureKilledEvent) e).getSource()] = "cell";
+                figures[((FigureKilledEvent) e).getSource()] = CreateFigure(((FigureKilledEvent) e).getSource());
+                figures[((FigureKilledEvent) e).getDestination()] = CreateFigure(((FigureKilledEvent) e).getDestination());
+                this.remove(((FigureKilledEvent) e).getSource());
+                this.addImpl(figures[((FigureKilledEvent) e).getSource()],null,((FigureKilledEvent) e).getSource());
+                this.addImpl(figures[((FigureKilledEvent) e).getDestination()],null,((FigureKilledEvent) e).getDestination());
+                this.remove(((FigureKilledEvent) e).getDestination()+1);
+                this.revalidate();
+            }
             if (e instanceof MovesMessageEvent) {
                 int index = ((MovesMessageEvent) e).getIndex();
-                figures[index].setBackground(Color.CYAN);
+//                figures[index].setBackground(Color.CYAN);
                 Integer[] moves = ((MovesMessageEvent) e).getMoves().toArray(new Integer[0]);
                 for (int i = 0; i < moves.length; i += 2) {
                     Integer x = moves[i];
@@ -79,29 +91,8 @@ public class GameSessionPanel extends JPanel implements Observer {
             if (e instanceof GameSessionStartEvent) {
                 this.names = ((GameSessionStartEvent) e).getFiguresNames();
                 for (int i = 0; i < 64; i++) {
-                    JButton btn;
-                    if (Objects.equals(names[i], "cell")) {
-                        if ((i + i / 8) % 2 == 0) {
-                            btn = createFigure("", "/images/figures/" + "white" + names[i] + ".png");
-                        } else {
-                            btn = createFigure("", "/images/figures/" + "black" + names[i] + ".png");
-                        }
-                    } else {
-                        if (Objects.equals(names[i], "queen")) {
-                            btn = createFigure("", "/images/figures/" + names[i] + "dance.gif");
-                        } else
-                            btn = createFigure("", "/images/figures/" + names[i] + ".png");
-                    }
-                    btn.setSize(new Dimension(50, 50));
-                    btn.setPreferredSize(new Dimension(50, 50));
-                    btn.addMouseListener(listeners.get(i));
-                    if ((i + i / 8) % 2 == 0) {
-                        btn.setBackground(Color.gray);
-                    } else {
-                        btn.setBackground(Color.white);
-                    }
-                    figures[i] = btn;
-                    this.add(figures[i]);
+                    figures[i] = CreateFigure(i);
+                    this.addImpl(figures[i],null,i);
                 }
             }
             if (e instanceof StatsMessageEvent) {
@@ -150,7 +141,7 @@ public class GameSessionPanel extends JPanel implements Observer {
         return line;
     }
 
-    private JButton createFigure(String text, String path) {
+    private JButton PlaceFigureImage(String text, String path) {
         BufferedImage name = null;
         try {
             name = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
@@ -163,5 +154,27 @@ public class GameSessionPanel extends JPanel implements Observer {
         ImageIcon nameimage = new ImageIcon(dimg);
         JButton line = new JButton(text, nameimage);
         return line;
+    }
+
+    private JButton CreateFigure(Integer index){
+        JButton btn;
+        if (Objects.equals(names[index], "cell")) {
+            if ((index + index / 8) % 2 == 0) {
+                btn = PlaceFigureImage("", "/images/figures/" + "white" + names[index] + ".png");
+            } else {
+                    btn = PlaceFigureImage("", "/images/figures/" + "black" + names[index] + ".png");
+            }
+        } else {
+            btn = PlaceFigureImage("", "/images/figures/" + names[index] + ".png");
+        }
+        btn.setSize(new Dimension(50, 50));
+        btn.setPreferredSize(new Dimension(50, 50));
+        btn.addMouseListener(listeners.get(index));
+        if ((index + index / 8) % 2 == 0) {
+            btn.setBackground(Color.gray);
+        } else {
+            btn.setBackground(Color.white);
+        }
+        return btn;
     }
 }

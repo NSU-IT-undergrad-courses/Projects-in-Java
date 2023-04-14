@@ -19,22 +19,30 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static java.lang.Integer.max;
+import static java.lang.Integer.signum;
+import static java.lang.Math.abs;
+import static java.lang.Math.min;
+
 public class ChessGameController extends ObservableImpl implements Observer {
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
+    private List<Integer> FiguresToMove = new ArrayList<Integer>();
+
+    public ChessGameController() {
+
+    }
 
     public List<Integer> getFiguresToMove() {
         return FiguresToMove;
     }
 
-    public void addFiguresToMove(Integer figure) {
-        FiguresToMove.add(figure);
+    public void setFiguresToMove(List<Integer> figuresToMove) {
+        FiguresToMove = figuresToMove;
     }
 
-    private List<Integer> FiguresToMove = new ArrayList<Integer>();
-
-    public ChessGameController() {
-
+    public void addFiguresToMove(Integer figure) {
+        FiguresToMove.add(figure);
     }
 
     //
@@ -58,16 +66,12 @@ public class ChessGameController extends ObservableImpl implements Observer {
         AudioInputStream inputStream = null;
         try {
             inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/game.wav")));
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (UnsupportedAudioFileException | IOException e) {
             throw new RuntimeException(e);
         }
         try {
             clip.open(inputStream);
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (LineUnavailableException | IOException e) {
             throw new RuntimeException(e);
         }
         clip.start();
@@ -86,7 +90,7 @@ public class ChessGameController extends ObservableImpl implements Observer {
         board newBoard = new ChessBoard();
         InputStream saved = this.getClass().getResourceAsStream(file);
         Scanner scanner;
-        scanner = new Scanner(saved);
+        scanner = new Scanner(Objects.requireNonNull(saved));
         scanner.useDelimiter("\n\r");
         ArrayList<Figure> figures = new ArrayList<>(64);
         for (int i = 0; i < 64; i++) {
@@ -104,22 +108,69 @@ public class ChessGameController extends ObservableImpl implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
-            if (e instanceof  FigureChosen){
+            if (e instanceof FigureChosen) {
                 addFiguresToMove(((FigureChosen) e).getIndex());
-                if (getFiguresToMove().size() == 2){
-                    if()
+                if (getFiguresToMove().size() == 2) {
+                    Integer source = getFiguresToMove().get(0);
+                    int source_length = source % 8;
+                    int source_width = source / 8;
+                    Integer destination = getFiguresToMove().get(1);
+                    int destination_length = destination % 8;
+                    int destination_width = destination / 8;
+                    List<Integer> CurrentMoves = CalculateAvailableMoves(Board.getPlace(source_length, source_width), source_length, source_width);
+                    for (int i = 0; i < CurrentMoves.size(); i += 2) {
+                        Boolean found = Objects.equals(CurrentMoves.get(i), destination_length) && Objects.equals(CurrentMoves.get(i + 1), destination_width);
+                        if (found) {
+                            Integer attack = Board.getPlace(source_length, source_width).getAttack();
+                            Integer defense = Board.getPlace(destination_length, destination_width).getDefense();
+                            if (Objects.equals(Board.getPlace(source_length, source_width).getName(), "horse")) {
+                                if (attack >= defense) {
+                                    Board.setPlace(destination_length, destination_width, Board.getPlace(source_length, source_width));
+                                    Board.setPlace(source_length, source_width, new CellFigure());
+                                    notify(new FigureKilledEvent(source, Board.getPlace(source_length, source_width).getName(), Board.getPlace(destination_length, destination_width).getName(), destination));
+                                } else {
+                                    Board.getPlace(destination_length, destination_width).setDefense(defense - attack);
+                                    notify(new FailedAttackEvent(Board.getPlace(destination_length, destination_width).getName(), -attack));
+                                }
+                            } else {
+                                boolean found_figures = false;
+                                int dj = min(source_width, destination_width) + 1;
+                                for (int di = min(source_length, destination_length) + 1; di < max(source_length, destination_length) && dj < max(source_width, destination_width); di++, dj++) {
+                                    if (di != source_length && di != destination_length && dj != source_width && dj != destination_width) {
+                                        if (!Objects.equals(Board.getPlace(di, dj).getName(), "cell")) {
+                                            found_figures = true;
+                                            notify(new CantPerformMoveEvent());
+                                        }
+
+                                    }
+                                }
+                                if (!found_figures) {
+                                    if (attack >= defense) {
+                                        Board.setPlace(destination_length, destination_width, Board.getPlace(source_length, source_width));
+                                        Board.setPlace(source_length, source_width, new CellFigure());
+                                        notify(new FigureKilledEvent(source, Board.getPlace(source_length, source_width).getName(), Board.getPlace(destination_length, destination_width).getName(), destination));
+                                    } else {
+                                        Board.getPlace(destination_length, destination_width).setDefense(defense - attack);
+                                        notify(new FailedAttackEvent(Board.getPlace(destination_length, destination_width).getName(), -attack));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    setFiguresToMove(new ArrayList<Integer>());
+                    notify(new ClearMovesEvent());
                 }
             }
             if (e instanceof RequestStatsEvent) {
-                Integer width = ((RequestStatsEvent) e).getFigureNumber();
-                Integer height = width / 8;
-                width %= 8;
-                if (Board.getPlace(width, height) instanceof CellFigure) {
+                int length = ((RequestStatsEvent) e).getFigureNumber();
+                int width = length / 8;
+                length %= 8;
+                if (Board.getPlace(length, width) instanceof CellFigure) {
 
                 } else {
-                    String name = Board.getPlace(width, height).getName();
-                    Integer attack = Board.getPlace(width, height).getAttack();
-                    Integer defense = Board.getPlace(width, height).getDefense();
+                    String name = Board.getPlace(length, width).getName();
+                    Integer attack = Board.getPlace(length, width).getAttack();
+                    Integer defense = Board.getPlace(length, width).getDefense();
                     notify(new StatsMessageEvent(name, attack, defense));
                 }
             }
@@ -137,9 +188,12 @@ public class ChessGameController extends ObservableImpl implements Observer {
 
     private List<Integer> CalculateAvailableMoves(Figure fig, int length, int width) {
         List<Integer> moves = new ArrayList<Integer>();
+        if (Objects.equals(fig.getName(), "cell")) {
+            return moves;
+        }
         for (int i = 0; i < fig.getTrace().size(); i += 2) {
-            Integer a = length + fig.getTrace().get(i);
-            Integer b = width + fig.getTrace().get(i + 1);
+            int a = length + fig.getTrace().get(i);
+            int b = width + fig.getTrace().get(i + 1);
             if (a >= 0 && a < 8 && b > -1 && b < 8) {
                 moves.add(a);
                 moves.add(b);

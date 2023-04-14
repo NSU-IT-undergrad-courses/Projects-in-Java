@@ -13,5 +13,6 @@ public class FigureChosen extends GameSessionEvent{
 
     public FigureChosen(Integer index) {
         this.index = index;
+
     }
 }

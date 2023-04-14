@@ -61,9 +61,10 @@ public class CellFigure implements Figure {
     }
 
     public CellFigure() {
-        this.name = "Cell";
+        this.name = "cell";
         this.attack = 0;
         this.defense = 0;
-        this.trace.add(0, 0);
+        this.trace.add(0);
+        this.trace.add(0);
     }
 }
