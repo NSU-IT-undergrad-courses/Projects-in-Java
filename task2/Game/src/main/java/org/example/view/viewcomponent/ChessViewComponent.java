@@ -10,6 +10,7 @@ import org.example.observer.event.session.ReleaseStatsEvent;
 import org.example.observer.event.session.StatsMessageEvent;
 import org.example.view.Panels;
 import org.example.view.panels.GameSessionPanel;
+import org.example.view.panels.MainScreenPanel;
 import org.example.view.panels.MainScreenPanelTEMP;
 
 import javax.imageio.ImageIO;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ChessViewComponent extends JFrame implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
-    MainScreenPanelTEMP mainscreen = new MainScreenPanelTEMP();
+    MainScreenPanel mainscreen = new MainScreenPanel();
     GameSessionPanel gamesession = new GameSessionPanel();
     JFrame frame = new JFrame();
 
@@ -77,7 +78,7 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
 
     public void PlaceMainScreen() {
         frame.add(mainscreen);
-        frame.pack();
+        frame.setVisible(true);
     }
 
     public void PlaceGameSession() {
@@ -90,9 +91,9 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
     @Override
     public void register(Observer o) {
         observers.add(o);
-        mainscreen.register(o);
+//        mainscreen.register(o);
         gamesession.register(o);
-        mainscreen.register(this);
+//        mainscreen.register(this);
         gamesession.register(this);
     }
 

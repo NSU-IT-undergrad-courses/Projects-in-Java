@@ -19,12 +19,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static java.lang.Integer.max;
 import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-public class ChessGameController extends ObservableImpl implements Observer {
+public class GameSessionController extends ObservableImpl implements Observer {
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
 
@@ -39,7 +38,7 @@ public class ChessGameController extends ObservableImpl implements Observer {
     private Integer turn = 1;
     private List<Integer> FiguresToMove = new ArrayList<Integer>();
 
-    public ChessGameController() {
+    public GameSessionController() {
 
     }
 
