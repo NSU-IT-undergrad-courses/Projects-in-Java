@@ -24,7 +24,7 @@ public class GameSessionPanel extends JPanel implements Observer {
     public GameSessionPanel() {
         this.setSize(Panels.getX(), Panels.getY());
         this.setPreferredSize(new Dimension(Panels.getX(), Panels.getY()));
-        setLayout(new GridLayout(8, 8, 5, 5));
+        setLayout(new GridLayout(8, 8, 0, 0));
         for (int i = 0; i < 64; i++) {
             listeners.add(i, new GameSessionMouseListener());
             listeners.get(i).setIndex(i);
@@ -40,12 +40,33 @@ public class GameSessionPanel extends JPanel implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
+            if (e instanceof  GameEndEvent){
+                int defeated = ((GameEndEvent) e).getDefeated();
+                String winner;
+                if (defeated == 1){
+                    winner = "Команда белых";
+                }
+                else{
+                    winner = "Команда черных";
+                }
+                    JDialog GameResult = new JDialog();
+                    GameResult.setPreferredSize(new Dimension(400,100));
+                    GameResult.setLocation(Panels.getX()/2,Panels.getY());
+                    GameResult.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    String message1 = winner+" одержала победу в этой игре!\n";
+                    String message2 = "Всего было сделано: "+((GameEndEvent) e).getTurns()+" ходов";
+                    GameResult.add(new JTextArea(message1+message2));
+                    GameResult.setTitle("🏆Конец игры🏆");
+                    GameResult.pack();
+                    GameResult.setVisible(true);
+                    this.setVisible(false);
+            }
+
             if (e instanceof  ClearMovesEvent){
                 DefaultAppearance();
             }
             if (e instanceof  FigureChosen){
                 int index = ((FigureChosen) e).getIndex();
-//                figures[index].setBackground(Color.CYAN);
 
             }
             if (e instanceof  FailedAttackEvent){
@@ -56,6 +77,8 @@ public class GameSessionPanel extends JPanel implements Observer {
                 String message1 = "Yours figure failed to kill "+e.getName()+" due to low attack💩\n";
                 String message2 = "!!!"+e.getName()+": "+((FailedAttackEvent) e).getDamage()+"!!!!";
                 fail.add(new JTextArea(message1+message2));
+                fail.pack();
+                fail.setVisible(true);
             }
             if (e instanceof  CantPerformMoveEvent){
                 JDialog fail = new JDialog();
@@ -79,12 +102,11 @@ public class GameSessionPanel extends JPanel implements Observer {
             }
             if (e instanceof MovesMessageEvent) {
                 int index = ((MovesMessageEvent) e).getIndex();
-//                figures[index].setBackground(Color.CYAN);
                 Integer[] moves = ((MovesMessageEvent) e).getMoves().toArray(new Integer[0]);
                 for (int i = 0; i < moves.length; i += 2) {
                     Integer x = moves[i];
                     Integer y = moves[i + 1];
-                    figures[y * 8 + x].setBackground(Color.green);
+                    figures[y * 8 + x].setBackground(Color.decode("#47DC5D"));
                 }
             }
             if (e instanceof GameSessionStartEvent) {
@@ -117,10 +139,10 @@ public class GameSessionPanel extends JPanel implements Observer {
     private void DefaultAppearance() {
         for (int i = 0; i < 64; i++){
             if ((i + i/8)%2  == 0) {
-                figures[i].setBackground(Color.gray);
+                figures[i].setBackground(Color.decode("#6C404F"));
             }
             else{
-                figures[i].setBackground(Color.white);
+                figures[i].setBackground(Color.decode("#F5DEDD"));
             }
         }
     }
@@ -159,9 +181,9 @@ public class GameSessionPanel extends JPanel implements Observer {
         JButton btn;
         if (Objects.equals(names[index], "cell")) {
             if ((index + index / 8) % 2 == 0) {
-                btn = PlaceFigureImage("", "/images/figures/" + "white" + names[index] + ".png");
+                btn = new JButton();
             } else {
-                    btn = PlaceFigureImage("", "/images/figures/" + "black" + names[index] + ".png");
+                    btn = new JButton();
             }
         } else {
             btn = PlaceFigureImage("", "/images/figures/" + names[index] + ".png");
@@ -170,7 +192,7 @@ public class GameSessionPanel extends JPanel implements Observer {
         btn.setPreferredSize(new Dimension(50, 50));
         btn.addMouseListener(listeners.get(index));
         if ((index + index / 8) % 2 == 0) {
-            btn.setBackground(Color.gray);
+            btn.setBackground(Color.decode("#6C404F"));
         } else {
             btn.setBackground(Color.white);
         }

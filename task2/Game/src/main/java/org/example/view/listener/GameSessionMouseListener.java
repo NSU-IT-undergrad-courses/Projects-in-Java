@@ -16,10 +16,6 @@ public class GameSessionMouseListener extends ObservableImpl implements MouseLis
         return index;
     }
 
-    private Color originalBG;
-    private long mousePressedTime;
-    private long delay = 150;
-    private Timer flashTimer;
     public void setIndex(Integer index) {
         this.index = index;
     }
@@ -50,42 +46,5 @@ public class GameSessionMouseListener extends ObservableImpl implements MouseLis
     public void mouseExited(MouseEvent e) {
         notify(new ReleaseStatsEvent());
     }
-//
-//
-//    @Override
-//    public void mousePressed(MouseEvent e) {
-//        mousePressedTime = e.getWhen();
-//        if(flashTimer != null)
-//            flashTimer.cancel();
-//        flashTimer = new Timer("flash timer");
-//        flashTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                e.getComponent().setVisible(false);
-//            }
-//        }, delay);
-//    }
-//
-//    @Override
-//    public void mouseReleased(MouseEvent e) {
-//        flashTimer.cancel();
-//        e.getComponent().setVisible(true);
-//        if(e.getWhen() - mousePressedTime > delay)
-//            longActionPerformed(e);
-//        else
-//            shortActionPerformed(e);
-//    }
-//
-//    public void shortActionPerformed(MouseEvent e){
-//    }
-//    public void longActionPerformed(MouseEvent e){
-//        notify(new RequestMovesEvent(getIndex()));
-//        try {
-//            TimeUnit.MILLISECONDS.sleep(10);
-//        } catch (InterruptedException ex) {
-//            throw new RuntimeException(ex);
-//        }
-//        notify(new FigureChosen(getIndex()));
-//    }
 
 }

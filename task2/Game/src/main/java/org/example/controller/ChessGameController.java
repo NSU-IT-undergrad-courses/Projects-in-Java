@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import static java.lang.Integer.max;
+import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
@@ -136,20 +137,23 @@ public class ChessGameController extends ObservableImpl implements Observer {
                         List<Integer> CurrentMoves = CalculateAvailableMoves(Board.getPlace(source_length, source_width), source_length, source_width);
                         for (int i = 0; i < CurrentMoves.size(); i += 2) {
                             boolean found = Objects.equals(CurrentMoves.get(i), destination_length) && Objects.equals(CurrentMoves.get(i + 1), destination_width);
-                            if (found && (Board.getPlace(destination).isWhite() == null || (Board.getPlace(destination).isWhite() != Board.getPlace(source).isWhite()))) {
-                                Integer attack = Board.getPlace(source_length, source_width).getAttack();
-                                Integer defense = Board.getPlace(destination_length, destination_width).getDefense();
-                                if (Objects.equals(Board.getPlace(source_length, source_width).getName(), "horse")) {
-                                    turn++;
-                                    MakeMove(source, source_length, source_width, destination, destination_length, destination_width, attack, defense);
-                                } else {
-                                    boolean clear = CheckWay(source_length, source_width, destination_length, destination_width);
-                                    if (clear) {
+                            if (found)
+                                if (Board.getPlace(destination).isWhite() == null || (Board.getPlace(destination).isWhite() != Board.getPlace(source).isWhite())) {
+                                    Integer attack = Board.getPlace(source_length, source_width).getAttack();
+                                    Integer defense = Board.getPlace(destination_length, destination_width).getDefense();
+                                    if (Board.getPlace(source_length, source_width).getName().contains("horse")) {
                                         turn++;
                                         MakeMove(source, source_length, source_width, destination, destination_length, destination_width, attack, defense);
+                                    } else {
+                                        boolean clear = CheckWay(source_length, source_width, destination_length, destination_width);
+                                        if (clear) {
+                                            turn++;
+                                            MakeMove(source, source_length, source_width, destination, destination_length, destination_width, attack, defense);
+                                        } else {
+                                            notify(new CantPerformMoveEvent());
+                                        }
                                     }
                                 }
-                            }
                         }
 
                     }
@@ -184,33 +188,33 @@ public class ChessGameController extends ObservableImpl implements Observer {
 
     private void MakeMove(Integer source, int source_length, int source_width, Integer destination, int destination_length, int destination_width, Integer attack, Integer defense) {
         if (attack >= defense) {
+            if (Board.getPlace(destination_length,destination_width).getName().contains("king")){
+                notify(new GameEndEvent(Board.getPlace(destination_length,destination_width).isWhite(),getTurn()));
+            }
             Board.setPlace(destination_length, destination_width, Board.getPlace(source_length, source_width));
             Board.setPlace(source_length, source_width, new CellFigure());
             notify(new FigureKilledEvent(source, Board.getPlace(source_length, source_width).getName(), Board.getPlace(destination_length, destination_width).getName(), destination));
+
         } else {
             Board.getPlace(destination_length, destination_width).setDefense(defense - attack);
             notify(new FailedAttackEvent(Board.getPlace(destination_length, destination_width).getName(), -attack));
         }
     }
 
-    private boolean CheckWay(int source_length, int source_width, int destination_length, int destination_width) {
-        boolean clear = true;
-        int dj = min(source_width, destination_width) ;
-        int di = min(source_length, destination_length);
-        for (; di < max(source_length, destination_length) || dj < max(source_width, destination_width); di ++, dj++) {
-            if (di > max(source_length, destination_length) ){
-                di--;
-            }
-            if (dj > max(source_width, destination_width)){
-                dj--;
-            }
-            if (!(di == source_length && dj == source_width)&& !(di == destination_length && dj == destination_width)) {
-                if (!Objects.equals(Board.getPlace(di, dj).getName(), "cell")) {
+    private boolean CheckWay(int source_length, int source_width, int destination_length, int destination_width) {boolean clear = true;
+       int deltax =  destination_length - source_length;
+       int deltay = destination_width - source_width;
+       int di = signum(deltax);
+       int dj = signum(deltay);
+       int startx = source_length;
+       int starty = source_width;
+       for (;abs(startx-source_length)<abs(deltax) && abs(starty-source_width)<abs(deltay); startx+=di, starty+=dj){
+           if (!(startx == source_length && starty == source_width)&& !(startx == destination_length && starty == destination_width)) {
+                if (!Objects.equals(Board.getPlace(startx, starty).getName(), "cell")) {
                     clear = false;
                 }
-
             }
-        }
+       }
         return clear;
     }
 
@@ -223,8 +227,8 @@ public class ChessGameController extends ObservableImpl implements Observer {
             int a = length + fig.getTrace().get(i);
             int b = width + fig.getTrace().get(i + 1);
             if (a >= 0 && a < 8 && b > -1 && b < 8){
-                if (fig.isWhite() != Board.getPlace(a, b).isWhite()){
-                    if (CheckWay(length, width, a, b) || Objects.equals(fig.getName(), "horse")) {
+                if (!Objects.equals(fig.isWhite(), Board.getPlace(a, b).isWhite())){
+                    if ((CheckWay(length, width, a, b)) || fig.getName().contains("horse")) {
                         moves.add(a);
                         moves.add(b);
                     }
