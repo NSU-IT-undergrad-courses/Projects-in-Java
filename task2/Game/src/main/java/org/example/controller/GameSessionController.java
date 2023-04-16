@@ -8,7 +8,7 @@ import org.example.model.figure.types.CellFigure;
 import org.example.observer.ObservableImpl;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.GameStartEvent;
+import org.example.observer.event.screens.*;
 import org.example.observer.event.session.*;
 
 import javax.sound.sampled.*;
@@ -122,6 +122,13 @@ public class GameSessionController extends ObservableImpl implements Observer {
 
     @Override
     public void handle(Event e) {
+        if (e instanceof GameStopEvent){
+            System.exit(0);
+        }
+        if (e instanceof PlaceSessionEvent){
+            StartGame();
+        }
+
         if (e instanceof GameSessionEvent) {
             if (e instanceof FigureChosen) {
                 addFiguresToMove(((FigureChosen) e).getIndex());
@@ -188,7 +195,7 @@ public class GameSessionController extends ObservableImpl implements Observer {
     private void MakeMove(Integer source, int source_length, int source_width, Integer destination, int destination_length, int destination_width, Integer attack, Integer defense) {
         if (attack >= defense) {
             if (Board.getPlace(destination_length,destination_width).getName().contains("king")){
-                notify(new GameEndEvent(Board.getPlace(destination_length,destination_width).isWhite(),getTurn()));
+                notify(new GameSessionEndEvent(Board.getPlace(destination_length,destination_width).isWhite(),getTurn()));
             }
             Board.setPlace(destination_length, destination_width, Board.getPlace(source_length, source_width));
             Board.setPlace(source_length, source_width, new CellFigure());

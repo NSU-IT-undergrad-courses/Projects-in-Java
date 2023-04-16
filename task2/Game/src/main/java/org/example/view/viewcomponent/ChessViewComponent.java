@@ -3,15 +3,14 @@ package org.example.view.viewcomponent;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.GameStartEvent;
+import org.example.observer.event.screens.GameStartEvent;
 import org.example.observer.event.session.GameSessionEvent;
-import org.example.observer.event.session.GameSessionStartEvent;
+import org.example.observer.event.screens.GameSessionStartEvent;
 import org.example.observer.event.session.ReleaseStatsEvent;
 import org.example.observer.event.session.StatsMessageEvent;
 import org.example.view.Panels;
 import org.example.view.panels.GameSessionPanel;
 import org.example.view.panels.MainScreenPanel;
-import org.example.view.panels.MainScreenPanelTEMP;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -91,9 +90,9 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
     @Override
     public void register(Observer o) {
         observers.add(o);
-//        mainscreen.register(o);
+        mainscreen.register(o);
         gamesession.register(o);
-//        mainscreen.register(this);
+        mainscreen.register(this);
         gamesession.register(this);
     }
 

@@ -2,6 +2,8 @@ package org.example.view.panels;
 
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.observer.event.screens.GameSessionEndEvent;
+import org.example.observer.event.screens.GameSessionStartEvent;
 import org.example.observer.event.session.*;
 import org.example.view.Panels;
 import org.example.view.listener.GameSessionMouseListener;
@@ -40,8 +42,8 @@ public class GameSessionPanel extends JPanel implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
-            if (e instanceof  GameEndEvent){
-                int defeated = ((GameEndEvent) e).getDefeated();
+            if (e instanceof GameSessionEndEvent){
+                int defeated = ((GameSessionEndEvent) e).getDefeated();
                 String winner;
                 if (defeated == 1){
                     winner = "Команда белых";
@@ -54,7 +56,7 @@ public class GameSessionPanel extends JPanel implements Observer {
                     GameResult.setLocation(Panels.getX()/2,Panels.getY());
                     GameResult.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                     String message1 = winner+" одержала победу в этой игре!\n";
-                    String message2 = "Всего было сделано: "+((GameEndEvent) e).getTurns()+" ходов";
+                    String message2 = "Всего было сделано: "+((GameSessionEndEvent) e).getTurns()+" ходов";
                     GameResult.add(new JTextArea(message1+message2));
                     GameResult.setTitle("🏆Конец игры🏆");
                     GameResult.pack();
