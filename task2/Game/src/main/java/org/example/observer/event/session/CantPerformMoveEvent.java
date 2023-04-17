@@ -1,4 +1,4 @@
 package org.example.observer.event.session;
 
-public class CantPerformMoveEvent extends GameSessionEvent{
+public class CantPerformMoveEvent extends GameSessionEvent {
 }

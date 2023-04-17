@@ -20,7 +20,7 @@ public class GameSessionPanel extends JPanel implements Observer {
     ArrayList<GameSessionMouseListener> listeners = new ArrayList<GameSessionMouseListener>(64);
     JButton[] figures = new JButton[64];
     private JWindow Stats = new JWindow();
-    private JFrame Log = new JFrame();
+    private final JFrame Log = new JFrame();
     private String[] names = new String[64];
 
     public GameSessionPanel() {
@@ -42,64 +42,63 @@ public class GameSessionPanel extends JPanel implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
-            if (e instanceof GameSessionEndEvent){
+            if (e instanceof GameSessionEndEvent) {
                 int defeated = ((GameSessionEndEvent) e).getDefeated();
                 String winner;
-                if (defeated == 1){
+                if (defeated == 1) {
                     winner = "Команда белых";
-                }
-                else{
+                } else {
                     winner = "Команда черных";
                 }
-                    JDialog GameResult = new JDialog();
-                    GameResult.setPreferredSize(new Dimension(400,100));
-                    GameResult.setLocation(Panels.getX()/2,Panels.getY());
-                    GameResult.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                    String message1 = winner+" одержала победу в этой игре!\n";
-                    String message2 = "Всего было сделано: "+((GameSessionEndEvent) e).getTurns()+" ходов";
-                    GameResult.add(new JTextArea(message1+message2));
-                    GameResult.setTitle("🏆Конец игры🏆");
-                    GameResult.pack();
-                    GameResult.setVisible(true);
-                    this.setVisible(false);
+                JDialog GameResult = new JDialog();
+                GameResult.setPreferredSize(new Dimension(400, 100));
+                GameResult.setLocation(Panels.getX() / 2, Panels.getY());
+                GameResult.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                String message1 = winner + " одержала победу в этой игре!\n";
+                String message2 = "Всего было сделано: " + ((GameSessionEndEvent) e).getTurns() + " ходов";
+                GameResult.add(new JTextArea(message1 + message2));
+                GameResult.setTitle("🏆Конец игры🏆");
+                GameResult.pack();
+                GameResult.setVisible(true);
+                this.setVisible(false);
             }
 
-            if (e instanceof  ClearMovesEvent){
+            if (e instanceof ClearMovesEvent) {
                 DefaultAppearance();
             }
-            if (e instanceof  FigureChosen){
+            if (e instanceof FigureChosen) {
                 int index = ((FigureChosen) e).getIndex();
 
             }
-            if (e instanceof  FailedAttackEvent){
+            if (e instanceof FailedAttackEvent) {
                 JDialog fail = new JDialog();
-                fail.setPreferredSize(new Dimension(400,100));
-                fail.setLocation(Panels.getX()/2,Panels.getY());
+                fail.setPreferredSize(new Dimension(400, 100));
+                fail.setLocation(Panels.getX() / 2, Panels.getY());
                 fail.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                String message1 = "Yours figure failed to kill "+e.getName()+" due to low attack💩\n";
-                String message2 = "!!!"+e.getName()+": "+((FailedAttackEvent) e).getDamage()+"!!!!";
-                fail.add(new JTextArea(message1+message2));
+                String message1 = "Yours figure failed to kill " + e.getName() + " due to low attack💩\n";
+                String message2 = "!!!" + e.getName() + ": " + ((FailedAttackEvent) e).getDamage() + "!!!!";
+                fail.add(new JTextArea(message1 + message2));
                 fail.pack();
                 fail.setVisible(true);
             }
-            if (e instanceof  CantPerformMoveEvent){
+            if (e instanceof CantPerformMoveEvent) {
                 JDialog fail = new JDialog();
-                fail.setPreferredSize(new Dimension(400,100));
-                fail.setLocation(Panels.getX()/2,Panels.getY()-200);
+                fail.setPreferredSize(new Dimension(400, 100));
+                fail.setLocation(Panels.getX() / 2, Panels.getY() - 200);
                 fail.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                 fail.add(new JTextArea("Can't peform this move!!!"));
                 fail.pack();
                 fail.setVisible(true);
             }
-            if (e instanceof FigureKilledEvent){
+            if (e instanceof FigureKilledEvent) {
                 names[((FigureKilledEvent) e).getDestination()] = ((FigureKilledEvent) e).getDestination_name();
                 names[((FigureKilledEvent) e).getSource()] = "cell";
                 figures[((FigureKilledEvent) e).getSource()] = CreateFigure(((FigureKilledEvent) e).getSource());
                 figures[((FigureKilledEvent) e).getDestination()] = CreateFigure(((FigureKilledEvent) e).getDestination());
                 this.remove(((FigureKilledEvent) e).getSource());
-                this.addImpl(figures[((FigureKilledEvent) e).getSource()],null,((FigureKilledEvent) e).getSource());
-                this.addImpl(figures[((FigureKilledEvent) e).getDestination()],null,((FigureKilledEvent) e).getDestination());
-                this.remove(((FigureKilledEvent) e).getDestination()+1);
+                this.addImpl(figures[((FigureKilledEvent) e).getSource()], null, ((FigureKilledEvent) e).getSource());
+                this.addImpl(figures[((FigureKilledEvent) e).getDestination()], null, ((FigureKilledEvent) e).getDestination());
+                this.remove(((FigureKilledEvent) e).getDestination() + 1);
                 this.revalidate();
             }
             if (e instanceof MovesMessageEvent) {
@@ -115,7 +114,7 @@ public class GameSessionPanel extends JPanel implements Observer {
                 this.names = ((GameSessionStartEvent) e).getFiguresNames();
                 for (int i = 0; i < 64; i++) {
                     figures[i] = CreateFigure(i);
-                    this.addImpl(figures[i],null,i);
+                    this.addImpl(figures[i], null, i);
                 }
             }
             if (e instanceof StatsMessageEvent) {
@@ -139,11 +138,10 @@ public class GameSessionPanel extends JPanel implements Observer {
     }
 
     private void DefaultAppearance() {
-        for (int i = 0; i < 64; i++){
-            if ((i + i/8)%2  == 0) {
+        for (int i = 0; i < 64; i++) {
+            if ((i + i / 8) % 2 == 0) {
                 figures[i].setBackground(Color.decode("#6C404F"));
-            }
-            else{
+            } else {
                 figures[i].setBackground(Color.decode("#F5DEDD"));
             }
         }
@@ -179,13 +177,13 @@ public class GameSessionPanel extends JPanel implements Observer {
         return line;
     }
 
-    private JButton CreateFigure(Integer index){
+    private JButton CreateFigure(Integer index) {
         JButton btn;
         if (Objects.equals(names[index], "cell")) {
             if ((index + index / 8) % 2 == 0) {
                 btn = new JButton();
             } else {
-                    btn = new JButton();
+                btn = new JButton();
             }
         } else {
             btn = PlaceFigureImage("", "/images/figures/" + names[index] + ".png");

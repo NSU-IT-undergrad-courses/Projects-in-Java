@@ -9,9 +9,9 @@ import java.awt.*;
 import java.util.Objects;
 
 public class MainScreenPanelTEMP extends JPanel {
-    private Dimension QuitDim = new Dimension(150, 62);
-    private MainScreenListener listener = new MainScreenListener();
-    private Point QuitPlace = new Point(Panels.getX() / 3, Panels.getY() * 3 / 4);
+    private final Dimension QuitDim = new Dimension(150, 62);
+    private final MainScreenListener listener = new MainScreenListener();
+    private final Point QuitPlace = new Point(Panels.getX() / 3, Panels.getY() * 3 / 4);
 
     public MainScreenPanelTEMP() {
         this.setBackground(Color.black);

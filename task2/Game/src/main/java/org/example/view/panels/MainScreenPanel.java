@@ -3,7 +3,9 @@ package org.example.view.panels;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.screens.*;
+import org.example.observer.event.boardcreator.AvailableTeamsRequest;
+import org.example.observer.event.screens.GameStopEvent;
+import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.view.Panels;
 
 import javax.imageio.ImageIO;
@@ -38,10 +40,10 @@ public class MainScreenPanel extends JPanel implements Observable {
     private JButton Scores;
     private JButton Creator;
     private Color originalbg;
-    private JDialog faqwindow = new JDialog();
-    private String click = "click.wav";
-    private String mygithub = "https://github.com/Inventorem";
-    private String mytelegram = "vonpartridge";
+    private final JDialog faqwindow = new JDialog();
+    private final String click = "click.wav";
+    private final String mygithub = "https://github.com/Inventorem";
+    private final String mytelegram = "vonpartridge";
 
     public MainScreenPanel() {
         initComponents();
@@ -64,8 +66,8 @@ public class MainScreenPanel extends JPanel implements Observable {
         Quit.setContentAreaFilled(false);
         Quit.addMouseListener(new MouseAdapter() {
             Observable o;
-            String alarm = "quitalarm.wav";
-            String bruh = "bruh.wav";
+            final String alarm = "quitalarm.wav";
+            final String bruh = "bruh.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -132,7 +134,6 @@ public class MainScreenPanel extends JPanel implements Observable {
         Profiles.setContentAreaFilled(false);
         Profiles.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -144,7 +145,7 @@ public class MainScreenPanel extends JPanel implements Observable {
             public void mouseClicked(MouseEvent e) {
                 AudioInputStream audioInputStream = null;
                 try {
-                    audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/" + profiles)));
+                    audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/" + click)));
                 } catch (UnsupportedAudioFileException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -159,7 +160,9 @@ public class MainScreenPanel extends JPanel implements Observable {
                     throw new RuntimeException(ex);
                 }
                 clip.start();
-                o.notify(new PlaceProfilesEvent());
+                MainScreenPanel.this.setVisible(false);
+                DeactivateButton(e);
+                o.notify(new PlacePanelEvent("profiles"));
             }
 
             @Override
@@ -180,7 +183,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Offline.setContentAreaFilled(false);
         Offline.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -207,7 +210,9 @@ public class MainScreenPanel extends JPanel implements Observable {
                     throw new RuntimeException(ex);
                 }
                 clip.start();
-                o.notify(new PlaceSessionEvent());
+                MainScreenPanel.this.setVisible(false);
+                o.notify(new PlacePanelEvent("boardcreator"));
+                o.notify(new AvailableTeamsRequest());
             }
 
             @Override
@@ -228,7 +233,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Online.setContentAreaFilled(false);
         Online.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -255,7 +260,8 @@ public class MainScreenPanel extends JPanel implements Observable {
                     throw new RuntimeException(ex);
                 }
                 clip.start();
-                o.notify(new PlaceProfilesEvent());
+                MainScreenPanel.this.setVisible(false);
+                o.notify(new PlacePanelEvent("boardcreator"));
             }
 
             @Override
@@ -276,7 +282,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Team.setContentAreaFilled(false);
         Team.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -303,7 +309,9 @@ public class MainScreenPanel extends JPanel implements Observable {
                     throw new RuntimeException(ex);
                 }
                 clip.start();
-                o.notify(new PlaceProfilesEvent());
+                DeactivateButton(e);
+                MainScreenPanel.this.setVisible(false);
+                o.notify(new PlacePanelEvent("team"));
             }
 
             @Override
@@ -346,7 +354,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Git.setContentAreaFilled(false);
         Git.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -376,7 +384,7 @@ public class MainScreenPanel extends JPanel implements Observable {
                 try {
                     URI URImygithub;
                     try {
-                        URImygithub= new URI("https://github.com/Inventorem");
+                        URImygithub = new URI("https://github.com/Inventorem");
                     } catch (URISyntaxException eURI) {
                         throw new RuntimeException(eURI);
                     }
@@ -404,7 +412,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Scores.setContentAreaFilled(false);
         Scores.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -431,7 +439,9 @@ public class MainScreenPanel extends JPanel implements Observable {
                     throw new RuntimeException(ex);
                 }
                 clip.start();
-                o.notify(new PlaceProfilesEvent());
+                MainScreenPanel.this.setVisible(false);
+                o.notify(new PlacePanelEvent("profiles"));
+                DeactivateButton(e);
             }
 
             @Override
@@ -452,7 +462,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Creator.setContentAreaFilled(false);
         Creator.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -481,7 +491,7 @@ public class MainScreenPanel extends JPanel implements Observable {
                 clip.start();
                 try {
                     try {
-                        Desktop.getDesktop().browse(new URI("https://"+"t.me/"+mytelegram));
+                        Desktop.getDesktop().browse(new URI("https://" + "t.me/" + mytelegram));
                     } catch (URISyntaxException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -508,7 +518,7 @@ public class MainScreenPanel extends JPanel implements Observable {
         Settings.setContentAreaFilled(false);
         Settings.addMouseListener(new MouseAdapter() {
             Observable o;
-            String profiles = "click.wav";
+            final String profiles = "click.wav";
             private Clip clip;
 
             public MouseListener SetObservable(Observable o) {
@@ -535,7 +545,8 @@ public class MainScreenPanel extends JPanel implements Observable {
                     throw new RuntimeException(ex);
                 }
                 clip.start();
-                o.notify(new PlaceProfilesEvent());
+                DeactivateButton(e);
+                o.notify(new PlacePanelEvent("settings"));
             }
 
             @Override

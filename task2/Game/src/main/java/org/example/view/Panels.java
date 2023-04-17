@@ -7,8 +7,8 @@ public enum Panels {
     SESSION_PREPARATION,
     GAME_SESSION,
     SETTING;
-    private static Integer x = 1280;
-    private static Integer y = 800;
+    private static final Integer x = 1280;
+    private static final Integer y = 800;
 
     public static Integer getX() {
         return x;

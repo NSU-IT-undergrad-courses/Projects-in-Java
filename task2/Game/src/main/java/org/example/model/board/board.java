@@ -12,5 +12,6 @@ public interface board {
     void setPlace(int length, int width, Figure fig);
 
     Figure getPlace(int length, int width);
+
     Figure getPlace(int index);
 }

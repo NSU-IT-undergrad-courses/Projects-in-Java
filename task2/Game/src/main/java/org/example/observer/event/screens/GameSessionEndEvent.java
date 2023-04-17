@@ -7,8 +7,8 @@ public class GameSessionEndEvent extends GameSessionEvent {
         return turns;
     }
 
-    private int turns;
-    private int defeated;
+    private final int turns;
+    private final int defeated;
 
     public GameSessionEndEvent(int defeated, int turns) {
         this.turns = turns;

@@ -16,7 +16,7 @@ public class HorseFigure implements Figure {
 
     private Integer isWhite;
 
-    public HorseFigure(String name, Integer attack, Integer defense,Integer isWhite) {
+    public HorseFigure(String name, Integer attack, Integer defense, Integer isWhite) {
         this.name = name;
         this.attack = attack;
         this.defense = defense;
@@ -26,7 +26,7 @@ public class HorseFigure implements Figure {
     private String name;
     private Integer attack;
     private Integer defense;
-    private List<Integer> trace = new ArrayList<Integer>();
+    private final List<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {

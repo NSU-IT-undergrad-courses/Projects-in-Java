@@ -1,6 +1,6 @@
 package org.example.observer.event.session;
 
-public class FailedAttackEvent extends GameSessionEvent{
+public class FailedAttackEvent extends GameSessionEvent {
     @Override
     public String getName() {
         return name;
@@ -12,12 +12,12 @@ public class FailedAttackEvent extends GameSessionEvent{
         this.damage = damage;
     }
 
-    private String name;
+    private final String name;
 
     public Integer getDamage() {
         return damage;
     }
 
-    private Integer damage;
+    private final Integer damage;
 
 }

@@ -2,14 +2,13 @@ package org.example.view.listener;
 
 import org.example.observer.Observable;
 import org.example.observer.ObservableImpl;
-import org.example.observer.event.session.*;
+import org.example.observer.event.session.FigureChosen;
+import org.example.observer.event.session.ReleaseStatsEvent;
+import org.example.observer.event.session.RequestMovesEvent;
+import org.example.observer.event.session.RequestStatsEvent;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 public class GameSessionMouseListener extends ObservableImpl implements MouseListener, Observable {
     public Integer getIndex() {

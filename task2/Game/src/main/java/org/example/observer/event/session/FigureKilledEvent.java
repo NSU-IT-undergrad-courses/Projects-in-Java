@@ -1,9 +1,9 @@
 package org.example.observer.event.session;
 
-public class FigureKilledEvent extends GameSessionEvent{
-    private Integer source;
+public class FigureKilledEvent extends GameSessionEvent {
+    private final Integer source;
 
-    private String source_name;
+    private final String source_name;
 
     public String getSource_name() {
         return source_name;
@@ -13,18 +13,18 @@ public class FigureKilledEvent extends GameSessionEvent{
         return destination_name;
     }
 
-    private String destination_name;
+    private final String destination_name;
+
     public Integer getSource() {
         return source;
     }
-
 
 
     public Integer getDestination() {
         return destination;
     }
 
-    private Integer destination;
+    private final Integer destination;
 
     public FigureKilledEvent(Integer source, String source_name, String destination_name, Integer destination) {
         this.source = source;

@@ -33,7 +33,7 @@ public class QueenFigure implements Figure {
     private Integer attack;
     private Integer defense;
 
-    private List<Integer> trace = new ArrayList<Integer>();
+    private final List<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {

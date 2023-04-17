@@ -18,7 +18,7 @@ public class CellFigure implements Figure {
 
     private String move;
 
-    private ArrayList<Integer> trace = new ArrayList<Integer>();
+    private final ArrayList<Integer> trace = new ArrayList<Integer>();
 
     @Override
     public String getName() {
