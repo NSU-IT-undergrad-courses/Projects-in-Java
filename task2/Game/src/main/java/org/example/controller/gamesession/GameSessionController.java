@@ -5,6 +5,7 @@ import org.example.model.board.ChessBoard;
 import org.example.model.board.board;
 import org.example.model.figure.Figure;
 import org.example.model.figure.types.CellFigure;
+import org.example.observer.Observable;
 import org.example.observer.ObservableImpl;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
@@ -25,7 +26,25 @@ import java.util.Scanner;
 import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 
-public class GameSessionController extends ObservableImpl implements Observer {
+public class GameSessionController implements Observer, Observable {
+    private final List<Observer> observers = new ArrayList<>();
+
+    @Override
+    public void register(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void remove(Observer o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void notify(Event e) {
+        for (Observer o : observers) {
+            o.handle(e);
+        }
+    }
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
 
@@ -37,7 +56,7 @@ public class GameSessionController extends ObservableImpl implements Observer {
         this.boardpath = boardpath;
     }
 
-    private String boardpath;
+    private String boardpath = "/session/createdboard.txt";
 
     public Integer getTurn() {
         return turn;
@@ -50,8 +69,7 @@ public class GameSessionController extends ObservableImpl implements Observer {
     private Integer turn = 1;
     private List<Integer> FiguresToMove = new ArrayList<Integer>();
 
-    public GameSessionController(String boardpath) {
-        this.boardpath = boardpath;
+    public GameSessionController() {
 
     }
 
@@ -65,13 +83,6 @@ public class GameSessionController extends ObservableImpl implements Observer {
 
     public void addFiguresToMove(Integer figure) {
         FiguresToMove.add(figure);
-    }
-
-    //
-    //Основные функции, типо начало, выход, сменить окно
-    //
-    public void Start() {
-        notify(new PlacePanelEvent("mainscreen"));
     }
 
     public void Exit() {

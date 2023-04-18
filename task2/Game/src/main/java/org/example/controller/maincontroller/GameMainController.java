@@ -10,8 +10,10 @@ import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.AvailableTeamsRequest;
+import org.example.observer.event.boardcreator.SendTeamsEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.RestartGameEvent;
+import org.example.observer.event.session.GameSessionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Objects;
 
 public class GameMainController implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
-    private GameSessionController sessioncontroller;
+    private GameSessionController sessioncontroller = new GameSessionController();
     private BoardCreator boardcreator = new BoardCreator();
     private MainScreenController mainscreencontroller;
     private ProfileController profilecontroller;
@@ -30,6 +32,9 @@ public class GameMainController implements Observer, Observable {
     public void register(Observer o) {
         observers.add(o);
         boardcreator.register(o);
+        sessioncontroller.register(o);
+        boardcreator.register(this);
+        sessioncontroller.register(this);
     }
 
     @Override
@@ -49,6 +54,9 @@ public class GameMainController implements Observer, Observable {
         if (e instanceof AvailableTeamsRequest){
             boardcreator.handle(e);
         }
+        if (e instanceof SendTeamsEvent){
+            boardcreator.handle(e);
+        }
         if (e instanceof RestartGameEvent) {
             Start();
         }
@@ -56,6 +64,12 @@ public class GameMainController implements Observer, Observable {
             if (Objects.equals(((PlacePanelEvent) e).getSource(), "profiles")) {
                 profilecontroller = new ProfileController();
             }
+            if (Objects.equals(((PlacePanelEvent) e).getSource(), "gamesession")) {
+                sessioncontroller.StartGame();
+            }
+        }
+        if (e instanceof GameSessionEvent){
+            sessioncontroller.handle(e);
         }
     }
 
