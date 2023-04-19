@@ -10,6 +10,9 @@ public enum Panels {
     private static final Integer x = 1280;
     private static final Integer y = 800;
     private static final Integer overall = 168;
+    public static Integer getOverall() {
+        return overall;
+    }
 
     public static Integer getX() {
         return x;

@@ -7,14 +7,19 @@ import org.example.observer.event.boardcreator.AvailableTeamsEvent;
 import org.example.observer.event.team.CreatedTeamMessage;
 import org.example.observer.event.team.CreatedTeamsRequest;
 import org.example.observer.event.team.RequsetSelectedTeamFigures;
+import org.example.observer.event.team.SendSelectedTeamStats;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class TeamController implements Observable, Observer{
     private String path = "src/main/resources/teams/";
     private List<String> teams = new ArrayList<String>();
+    private final List<String []>stats = new ArrayList<>();
     private String current_team;
     private void getTeams() {
         teams =  new ArrayList<String>();
@@ -54,7 +59,21 @@ public class TeamController implements Observable, Observer{
         }
         if (e instanceof RequsetSelectedTeamFigures){
             current_team = ((RequsetSelectedTeamFigures) e).getTeamFile();
-//            SendCurrentTeamStats
+            GetSelectedStats();
         }
+    }
+
+    private void GetSelectedStats() {
+        InputStream selectedteam = getClass().getResourceAsStream("/teams/"+current_team);
+        assert selectedteam != null;
+        Scanner scanner = new Scanner(selectedteam);
+        for (int i = 0; i < 5;i++){
+            String [] stats_line = scanner.nextLine().split("#");
+            List<String> list = new ArrayList<String>(Arrays.asList(stats_line));
+            list.remove(0);
+            stats_line = list.toArray(new String[0]);
+            stats.add(stats_line);
+        }
+        notify(new SendSelectedTeamStats(stats));
     }
 }

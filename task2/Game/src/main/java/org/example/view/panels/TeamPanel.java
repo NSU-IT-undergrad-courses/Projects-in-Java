@@ -8,6 +8,8 @@ import org.example.observer.event.boardcreator.AvailableTeamsRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.team.CreatedTeamMessage;
 import org.example.observer.event.team.RequsetSelectedTeamFigures;
+import org.example.observer.event.team.SendSelectedTeamStats;
+import org.example.view.Panels;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,12 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.awt.Font.BOLD;
+
 public class TeamPanel extends JPanel implements Observable, Observer{
     private JButton Quit;
     private List<String> teams;
+    private Integer overall = Panels.getOverall();
     private String icon = "team_logo.png";
     private final String [] figures = new String[]{"crook","horse","bishop","queen","king"};
     private final String [] stats = new String[]{"attack", "defense","trace", "distance"};
+    private String points = "points";
 
     public TeamPanel() {
         initComponents();
@@ -86,6 +92,17 @@ public class TeamPanel extends JPanel implements Observable, Observer{
             stats_line.setVisible(true);
             this.add(stats_line, constraints);
         }
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = GridBagConstraints.WEST-figures.length-1;
+        constraints.gridwidth = 3;
+        constraints.gridy = 3+stats.length;
+        constraints.gridheight = 1;
+        JLabel overall_points = new JLabel("Overall points: "+overall,CreateImageIcon("/images/stats/"+points+".png",100,100),JLabel.LEFT);
+        overall_points.setFont(new Font("Comic Sans", BOLD,30));
+        overall_points.setForeground(Color.white);
+        overall_points.setVisible(true);
+        this.add(overall_points, constraints);
         constraints.gridx++;
 
     }
@@ -105,7 +122,6 @@ public class TeamPanel extends JPanel implements Observable, Observer{
     }
 
     private ImageIcon CreateImageIcon(String path, int x, int y) {
-        System.out.println(path);
         BufferedImage name = null;
         try {
             name = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
@@ -141,6 +157,27 @@ public class TeamPanel extends JPanel implements Observable, Observer{
         if (e instanceof CreatedTeamMessage){
             this.teams = ((CreatedTeamMessage) e).getTeams();
             DrawTeams();
+        }
+        if (e instanceof SendSelectedTeamStats){
+            List<String []> stats = ((SendSelectedTeamStats) e).getStats();
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.anchor = GridBagConstraints.CENTER;
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.gridx = GridBagConstraints.WEST-figures.length;
+            constraints.gridwidth = 1;
+            constraints.gridy = 3;
+            constraints.gridheight = 1;
+            for (int i = 0; i < stats.size();i++){
+                constraints.gridy = 3;
+                for (int j = 0; j < stats.get(i).length;j++){
+                    JLabel figure_image = new JLabel(stats.get(i)[j],JLabel.CENTER);
+                    figure_image.setFont();
+                    figure_image.setForeground(Color.white);
+                    this.add(figure_image,constraints);
+                    constraints.gridy++;
+                }
+                constraints.gridx++;
+            }
         }
     }
 
