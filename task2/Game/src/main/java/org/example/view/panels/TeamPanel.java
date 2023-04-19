@@ -3,8 +3,6 @@ package org.example.view.panels;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.AvailableTeamsEvent;
-import org.example.observer.event.boardcreator.AvailableTeamsRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.team.CreatedTeamMessage;
 import org.example.observer.event.team.RequsetSelectedTeamFigures;
@@ -20,6 +18,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +31,7 @@ public class TeamPanel extends JPanel implements Observable, Observer{
     private String icon = "team_logo.png";
     private final String [] figures = new String[]{"crook","horse","bishop","queen","king"};
     private final String [] stats = new String[]{"attack", "defense","trace", "distance"};
+    private List<String[]> changedstats= new ArrayList<String []>();
     private String points = "points";
 
     public TeamPanel() {
@@ -159,26 +159,69 @@ public class TeamPanel extends JPanel implements Observable, Observer{
             DrawTeams();
         }
         if (e instanceof SendSelectedTeamStats){
-            List<String []> stats = ((SendSelectedTeamStats) e).getStats();
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.anchor = GridBagConstraints.CENTER;
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.gridx = GridBagConstraints.WEST-figures.length;
-            constraints.gridwidth = 1;
-            constraints.gridy = 3;
-            constraints.gridheight = 1;
-            for (int i = 0; i < stats.size();i++){
-                constraints.gridy = 3;
-                for (int j = 0; j < stats.get(i).length;j++){
-                    JLabel figure_image = new JLabel(stats.get(i)[j],JLabel.CENTER);
-                    figure_image.setFont();
-                    figure_image.setForeground(Color.white);
-                    this.add(figure_image,constraints);
-                    constraints.gridy++;
-                }
-                constraints.gridx++;
-            }
+            CreateStats((SendSelectedTeamStats) e);
         }
+    }
+
+    private void CreateStats(SendSelectedTeamStats e) {
+        changedstats = e.getStats();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = GridBagConstraints.WEST-figures.length;
+        constraints.gridwidth = 1;
+        constraints.gridy = 3;
+        constraints.gridheight = 1;
+        for (int i = 0; i < changedstats.size();i++){
+            constraints.gridy = 3;
+            for (int j = 0; j < changedstats.get(i).length;j++){
+                JButton figure_image = new JButton(changedstats.get(i)[j]);
+                figure_image.setFont(new Font("Comic Sans",BOLD,16));
+                figure_image.setForeground(Color.white);
+                figure_image.setOpaque(true);
+                figure_image.setBorderPainted(true);
+                figure_image.setFocusPainted(false);
+                figure_image.setContentAreaFilled(false);
+                figure_image.setVisible(true);
+                this.add(figure_image,constraints);
+                int finalI = i;
+                int finalJ = j;
+                figure_image.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        setNewValue(finalI,finalJ);
+                        ((JButton)e.getSource()).setText(changedstats.get(finalI)[finalJ]);
+                    }
+                });
+                constraints.gridy++;
+            }
+            constraints.gridx++;
+        }
+
+    }
+
+    private void setNewValue(int i, int j) {
+        String [] stats = new String[]{"1","2","3","4","5","6","7","8","9"};
+        String [] trace = new String []{"crosshair","diagonal","forward","horse","line","queen"};
+        String [] distance = new String[]{"1 ","2 ","3 ","4 ","5 ","6 ","7 "};
+        if (j < 2){
+            Integer value = Integer.valueOf(changedstats.get(i)[j]);
+            value = (value +1) % 10;
+            changedstats.get(i)[j] = String.valueOf(value);
+        }
+        if (j == 3){
+            List<String> trace_list = Arrays.asList(trace);
+            int index = trace_list.indexOf(changedstats.get(i)[j]);
+            index = (index + 1) % trace.length;
+            changedstats.get(i)[j] = trace[index];
+        }
+//        if (j == 4){
+//            List<String> trace_list = Arrays.asList(trace);
+//            int index = trace_list.indexOf(changedstats.get(i)[j]);
+//            index = (index + 1) % trace.length;
+//            changedstats.get(i)[j] = trace[index];
+//        }
+
     }
 
     private void DrawTeams() {

@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class TeamController implements Observable, Observer{
     private String path = "src/main/resources/teams/";
     private List<String> teams = new ArrayList<String>();
-    private final List<String []>stats = new ArrayList<>();
+    private List<String []>stats = new ArrayList<>();
     private String current_team;
     private void getTeams() {
         teams =  new ArrayList<String>();
@@ -67,6 +67,7 @@ public class TeamController implements Observable, Observer{
         InputStream selectedteam = getClass().getResourceAsStream("/teams/"+current_team);
         assert selectedteam != null;
         Scanner scanner = new Scanner(selectedteam);
+        stats = new ArrayList<String []>();
         for (int i = 0; i < 5;i++){
             String [] stats_line = scanner.nextLine().split("#");
             List<String> list = new ArrayList<String>(Arrays.asList(stats_line));
