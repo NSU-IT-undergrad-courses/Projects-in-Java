@@ -135,7 +135,7 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
         Start.setPreferredSize(new Dimension(250,190));
         Start.setOpaque(true);
         Start.setFocusPainted(false);
-        Start.setBorderPainted(true);
+        Start.setBorderPainted(false);
         Start.setContentAreaFilled(false);
         Start.setVisible(true);
         BoardCreatorPanel.this.add(Start,menuconstraints);
@@ -310,8 +310,9 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
 
     private void CheckTeams() {
         if (first && second){
-            Start.setIcon(CreateImageIcon("/images/stats/"+start,250,190));
             Start.setBorder(BorderFactory.createLineBorder(Color.yellow,5));
+            Start.setIcon(CreateImageIcon("/images/stats/"+start,250,190));
+            Start.setBorderPainted(true);
             Start.addMouseListener(new MouseAdapter() {
                 Observable o;
                 public MouseAdapter Init(Observable o){

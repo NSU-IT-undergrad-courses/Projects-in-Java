@@ -4,7 +4,7 @@ import org.example.observer.event.Event;
 
 import java.util.List;
 
-public class AvailableTeamsEvent extends Event {
+public class AvailableTeamsEvent extends BoardCreatorEvent {
     private List<String> teams;
 
     public AvailableTeamsEvent(List<String> teams) {

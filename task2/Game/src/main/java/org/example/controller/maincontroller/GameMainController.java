@@ -10,10 +10,12 @@ import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.AvailableTeamsRequest;
+import org.example.observer.event.boardcreator.BoardCreatorEvent;
 import org.example.observer.event.boardcreator.SendTeamsEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.RestartGameEvent;
 import org.example.observer.event.session.GameSessionEvent;
+import org.example.observer.event.team.TeamEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ public class GameMainController implements Observer, Observable {
     private BoardCreator boardcreator = new BoardCreator();
     private MainScreenController mainscreencontroller;
     private ProfileController profilecontroller;
-    private TeamController teamcontroller;
+    private TeamController teamcontroller = new TeamController();
     private ScoresController scorescontroller;
 
     @Override
@@ -33,8 +35,11 @@ public class GameMainController implements Observer, Observable {
         observers.add(o);
         boardcreator.register(o);
         sessioncontroller.register(o);
+        teamcontroller.register(o);
         boardcreator.register(this);
         sessioncontroller.register(this);
+        teamcontroller.register(this);
+
     }
 
     @Override
@@ -51,11 +56,14 @@ public class GameMainController implements Observer, Observable {
 
     @Override
     public void handle(Event e) {
-        if (e instanceof AvailableTeamsRequest){
+        if (e instanceof BoardCreatorEvent){
             boardcreator.handle(e);
         }
-        if (e instanceof SendTeamsEvent){
-            boardcreator.handle(e);
+        if (e instanceof GameSessionEvent){
+            sessioncontroller.handle(e);
+        }
+        if (e instanceof TeamEvent){
+            teamcontroller.handle(e);
         }
         if (e instanceof RestartGameEvent) {
             Start();
@@ -67,9 +75,6 @@ public class GameMainController implements Observer, Observable {
             if (Objects.equals(((PlacePanelEvent) e).getSource(), "gamesession")) {
                 sessioncontroller.StartGame();
             }
-        }
-        if (e instanceof GameSessionEvent){
-            sessioncontroller.handle(e);
         }
     }
 

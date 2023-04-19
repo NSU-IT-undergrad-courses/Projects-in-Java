@@ -3,7 +3,11 @@ package org.example.view.panels;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.observer.event.boardcreator.AvailableTeamsEvent;
+import org.example.observer.event.boardcreator.AvailableTeamsRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
+import org.example.observer.event.team.CreatedTeamMessage;
+import org.example.observer.event.team.RequsetSelectedTeamFigures;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,8 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TeamPanel extends JPanel implements Observable {
+public class TeamPanel extends JPanel implements Observable, Observer{
     private JButton Quit;
+    private List<String> teams;
+    private String icon = "team_logo.png";
+    private final String [] figures = new String[]{"crook","horse","bishop","queen","king"};
+    private final String [] stats = new String[]{"attack", "defense","trace", "distance"};
 
     public TeamPanel() {
         initComponents();
@@ -32,10 +40,12 @@ public class TeamPanel extends JPanel implements Observable {
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
         GridBagConstraints constraints = new GridBagConstraints();
+        DrawFigures(constraints);
+        WriteStats(constraints);
 
         constraints.anchor = GridBagConstraints.SOUTH;
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
+        constraints.gridx = GridBagConstraints.RELATIVE;
         constraints.gridwidth = 1;
         constraints.gridy = 8;
         constraints.gridheight = 1;
@@ -63,7 +73,39 @@ public class TeamPanel extends JPanel implements Observable {
         Quit.setIcon(CreateImageIcon("/images/mainscreen/quit.png", 87, 87));
     }
 
+    private void WriteStats(GridBagConstraints constraints) {
+        for (int i = 0; i < stats.length; i++){
+            constraints.anchor = GridBagConstraints.SOUTH;
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.gridx = GridBagConstraints.WEST-figures.length-1;
+            constraints.gridwidth = 1;
+            constraints.gridy = 3+i;
+            constraints.gridheight = 1;
+            JLabel stats_line = new JLabel(stats[i],CreateImageIcon("/images/stats/"+stats[i]+".png",50,50),JLabel.CENTER);
+            stats_line.setForeground(Color.white);
+            stats_line.setVisible(true);
+            this.add(stats_line, constraints);
+        }
+        constraints.gridx++;
+
+    }
+
+    private void DrawFigures(GridBagConstraints constraints) {
+        for (int i = 0; i < figures.length; i++){
+            constraints.anchor = GridBagConstraints.SOUTH;
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.gridx = GridBagConstraints.WEST-figures.length+i;
+            constraints.gridwidth = 1;
+            constraints.gridy = 2;
+            constraints.gridheight = 1;
+            JLabel figure_image = new JLabel(CreateImageIcon("/images/figures/"+"black "+figures[i]+".png",100,100));
+            figure_image.setVisible(true);
+            this.add(figure_image, constraints);
+        }
+    }
+
     private ImageIcon CreateImageIcon(String path, int x, int y) {
+        System.out.println(path);
         BufferedImage name = null;
         try {
             name = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
@@ -93,4 +135,96 @@ public class TeamPanel extends JPanel implements Observable {
             o.handle(e);
         }
     }
+
+    @Override
+    public void handle(Event e) {
+        if (e instanceof CreatedTeamMessage){
+            this.teams = ((CreatedTeamMessage) e).getTeams();
+            DrawTeams();
+        }
+    }
+
+    private void DrawTeams() {
+        for (int i =0; i < teams.size(); i++){
+            JButton team = new JButton(teams.get(i).substring(0,teams.get(i).length()-4), CreateImageIcon("/images/stats/"+icon,50,50));
+            team.setPreferredSize(new Dimension(200,50));
+            GridBagConstraints menuconstraints = new GridBagConstraints();
+            menuconstraints.anchor = GridBagConstraints.WEST;
+            menuconstraints.fill = GridBagConstraints.CENTER;
+            menuconstraints.gridx = 1;
+            menuconstraints.gridy = i+2;
+            SetTeamButtonSettings(team, menuconstraints);
+            team.addMouseListener(new MouseAdapter() {
+                Observable o;
+
+                public MouseAdapter setFile_name(String file_name) {
+                    this.file_name = file_name;
+                    return this;
+                }
+
+                String file_name;
+                Integer index;
+                public MouseAdapter Init(Observable o, String file_name, Integer i){
+                    this.o = o;
+                    this.file_name = file_name;
+                    index = i;
+                    return this;
+                }
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    RequestTeamFigures(((JButton)e.getSource()).getText());
+                }
+
+            }.Init(this,teams.get(i),i));
+        }
+        JButton team = new JButton("Create new", CreateImageIcon("/images/stats/"+icon,50,50));
+        team.setPreferredSize(new Dimension(200,50));
+        GridBagConstraints menuconstraints = new GridBagConstraints();
+        menuconstraints.anchor = GridBagConstraints.WEST;
+        menuconstraints.fill = GridBagConstraints.CENTER;
+        menuconstraints.gridx = 1;
+        menuconstraints.gridy = teams.size()+2;
+        SetTeamButtonSettings(team, menuconstraints);
+        team.addMouseListener(new MouseAdapter() {
+            Observable o;
+
+            public MouseAdapter setFile_name(String file_name) {
+                this.file_name = file_name;
+                return this;
+            }
+
+            String file_name;
+            Integer index;
+            public MouseAdapter Init(Observable o, String file_name, Integer i){
+                this.o = o;
+                this.file_name = file_name;
+                index = i;
+                return this;
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                RequestTeamFigures(((JButton)e.getSource()).getText());
+            }
+
+        }.Init(this,"Create new", teams.size()+1));
+        this.revalidate();
+    }
+
+    private void SetTeamButtonSettings(JButton team, GridBagConstraints menuconstraints) {
+        menuconstraints.weightx = 0.1;
+        menuconstraints.weighty = 0.2;
+        menuconstraints.gridwidth = 5;
+        menuconstraints.gridheight = 1;
+        team.setForeground(Color.white);
+        team.setOpaque(true);
+        team.setFocusPainted(false);
+        team.setContentAreaFilled(false);
+        team.setVisible(true);
+        this.add(team,menuconstraints);
+    }
+
+    private void RequestTeamFigures(String text) {
+        notify(new RequsetSelectedTeamFigures(text+".txt"));
+    }
+
 }

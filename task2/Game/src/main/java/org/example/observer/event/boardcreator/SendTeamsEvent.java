@@ -2,7 +2,7 @@ package org.example.observer.event.boardcreator;
 
 import org.example.observer.event.Event;
 
-public class SendTeamsEvent extends Event {
+public class SendTeamsEvent extends BoardCreatorEvent {
     public String[] getChosen() {
         return teams;
     }

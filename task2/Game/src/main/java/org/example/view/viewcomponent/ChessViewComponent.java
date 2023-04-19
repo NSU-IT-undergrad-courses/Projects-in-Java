@@ -5,12 +5,15 @@ import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.AvailableTeamsEvent;
+import org.example.observer.event.boardcreator.AvailableTeamsRequest;
+import org.example.observer.event.boardcreator.BoardCreatorEvent;
 import org.example.observer.event.screens.GameSessionStartEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.SetLooknFeelEvent;
 import org.example.observer.event.session.GameSessionEvent;
 import org.example.observer.event.session.ReleaseStatsEvent;
 import org.example.observer.event.session.StatsMessageEvent;
+import org.example.observer.event.team.TeamEvent;
 import org.example.view.Panels;
 import org.example.view.panels.*;
 
@@ -43,8 +46,12 @@ public class ChessViewComponent extends JFrame implements Observer, Observable {
 
     @Override
     public void handle(Event e) {
-        if (e instanceof AvailableTeamsEvent){
+        if (e instanceof BoardCreatorEvent){
+            System.out.println();
             boardcreator.handle(e);
+        }
+        if (e instanceof TeamEvent){
+            team.handle(e);
         }
         if (e instanceof SetLooknFeelEvent) {
             String LnFName = null;

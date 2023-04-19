@@ -5,6 +5,7 @@ import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.AvailableTeamsEvent;
 import org.example.observer.event.boardcreator.AvailableTeamsRequest;
+import org.example.observer.event.boardcreator.BoardCreatorEvent;
 import org.example.observer.event.boardcreator.SendTeamsEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 
@@ -19,6 +20,7 @@ public class BoardCreator implements Observable, Observer {
     private String path = "src/main/resources/teams/";
     private List<String> teams = new ArrayList<String>();
     private void getTeams() {
+        teams =  new ArrayList<String>();
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -47,13 +49,13 @@ public class BoardCreator implements Observable, Observer {
 
     @Override
     public void handle(Event e) {
-        if (e instanceof SendTeamsEvent){
-            CreateBoard(((SendTeamsEvent) e).getChosen());
+            if (e instanceof SendTeamsEvent){
+                CreateBoard(((SendTeamsEvent) e).getChosen());
+            }
+            if (e instanceof AvailableTeamsRequest){
+                getTeams();
+            }
         }
-        if (e instanceof AvailableTeamsRequest){
-            getTeams();
-        }
-    }
 
     private void CreateBoard(String[] chosen) {
         InputStream team1 = getClass().getResourceAsStream("/teams/" + chosen[0] + ".txt");

@@ -1,0 +1,64 @@
+white crook#4#2#crosshair#1 2 3 4 5 6 7
+white horse#3#2#horse#1 2
+white bishop#4#1#diagonal#1 2 3 4 5 6 7
+white queen#4#4#queen#1 2 3 4 5 6 7
+white king#1#1#queen#1
+white bishop#4#1#diagonal#1 2 3 4 5 6 7
+white horse#3#2#horse#1
+white crook#4#2#crosshair#1 2 3 4 5 6 7
+white pawn#1#1#forward#1
+white pawn#1#1#forward#1
+white pawn#1#1#forward#1
+white pawn#1#11#forward#1
+white pawn#1#1#forward#1
+white pawn#1#1#forward#1
+white pawn#1#1#forward#1
+white pawn#1#1#forward#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+black pawn#1#1#forward#-1
+black pawn#1#1#forward#-1
+black pawn#1#1#forward#-1
+black pawn#1#1#forward#-1
+black pawn#1#11#forward#-1
+black pawn#1#1#forward#-1
+black pawn#1#1#forward#-1
+black pawn#1#1#forward#-1
+black crook#4#2#crosshair#1 2 3 4 5 6 7
+black horse#3#2#horse#1
+black bishop#4#1#diagonal#1 2 3 4 5 6 7
+black king#1#1#queen#1
+black queen#4#4#queen#1 2 3 4 5 6 7
+black bishop#4#1#diagonal#1 2 3 4 5 6 7
+black horse#3#2#horse#1 2
+black crook#4#2#crosshair#1 2 3 4 5 6 7

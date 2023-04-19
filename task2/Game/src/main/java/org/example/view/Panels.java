@@ -9,6 +9,7 @@ public enum Panels {
     SETTING;
     private static final Integer x = 1280;
     private static final Integer y = 800;
+    private static final Integer overall = 168;
 
     public static Integer getX() {
         return x;

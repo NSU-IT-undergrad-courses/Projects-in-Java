@@ -6,6 +6,7 @@ import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.AvailableTeamsRequest;
 import org.example.observer.event.screens.GameStopEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
+import org.example.observer.event.team.CreatedTeamsRequest;
 import org.example.view.Panels;
 
 import javax.imageio.ImageIO;
@@ -312,6 +313,7 @@ public class MainScreenPanel extends JPanel implements Observable {
                 DeactivateButton(e);
                 MainScreenPanel.this.setVisible(false);
                 o.notify(new PlacePanelEvent("team"));
+                o.notify(new CreatedTeamsRequest());
             }
 
             @Override
