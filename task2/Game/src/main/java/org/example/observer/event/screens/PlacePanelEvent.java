@@ -3,13 +3,13 @@ package org.example.observer.event.screens;
 import org.example.observer.event.Event;
 
 public class PlacePanelEvent extends Event {
-    private final String source;
+    private final Integer source;
 
-    public PlacePanelEvent(String source) {
+    public PlacePanelEvent(Integer source) {
         this.source = source;
     }
 
-    public String getSource() {
+    public Integer getSource() {
         return source;
     }
 }

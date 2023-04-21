@@ -9,6 +9,6 @@ public class RequsetSelectedTeamFigures extends TeamEvent{
         return teamFile;
     }
 
-    private String teamFile;
+    private final String teamFile;
 
 }

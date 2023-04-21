@@ -1,7 +1,7 @@
 package org.example.model.board;
 
 import org.example.model.figure.Figure;
-import org.example.model.figure.types.CellFigure;
+import org.example.model.figure.CellFigure;
 
 import java.util.ArrayList;
 

@@ -1,14 +1,12 @@
 package org.example;
 
-import org.example.controller.maincontroller.GameMainController;
-import org.example.view.viewcomponent.ChessViewComponent;
-
-import java.io.File;
+import org.example.controllers.RootController;
+import org.example.view.RootViewComponent;
 
 class Main {
     public static void main(String[] args) {
-        GameMainController RootController = new GameMainController();
-        ChessViewComponent ViewComponent = new ChessViewComponent();
+        RootController RootController = new RootController();
+        RootViewComponent ViewComponent = new RootViewComponent();
         RootController.register(ViewComponent);
         ViewComponent.register(RootController);
         RootController.Start();
