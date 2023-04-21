@@ -7,6 +7,7 @@ import org.example.observer.event.Event;
 import org.example.observer.event.team.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -170,18 +171,18 @@ public class TeamPanel extends JPanel implements Observable, Observer {
         String[] stats = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9"};
         String[] trace = new String[]{"crosshair", "diagonal", "forward", "horse", "line", "queen"};
         String[] distance = new String[]{"1", "2", "3", "4", "5", "6", "7"};
-        if (j < 2) {
+        if (j < 3) {
             Integer value = Integer.valueOf(changedstats.get(i)[j]);
             value = (value + 1) % 10;
             changedstats.get(i)[j] = String.valueOf(value);
         }
-        if (j == 2) {
+        if (j == 3) {
             List<String> trace_list = Arrays.asList(trace);
             int index = trace_list.indexOf(changedstats.get(i)[j]);
             index = (index + 1) % trace.length;
             changedstats.get(i)[j] = trace[index];
         }
-        if (j == 3){
+        if (j == 4){
             List<String> distance_list = Arrays.asList(trace);
             Character last = changedstats.get(i)[j].charAt(changedstats.get(i)[j].length()-1);
             StringBuilder new_distance = new StringBuilder();
@@ -214,6 +215,7 @@ public class TeamPanel extends JPanel implements Observable, Observer {
     private void Add_CreateNew() {
         JButton team = new JButton("Create new", CreateImageIcon(IMG_TEAM.getDEFAULT_PATH_RESOURCE() + TEAM_ICON, 50, 50));
         team.setPreferredSize(new Dimension(200, 50));
+        team.setBorder(BorderFactory.createSoftBevelBorder(BevelBorder.LOWERED,Color.yellow,Color.green));
         GridBagConstraints menuconstraints = new GridBagConstraints();
         menuconstraints.anchor = GridBagConstraints.WEST;
         menuconstraints.fill = GridBagConstraints.CENTER;
@@ -316,7 +318,7 @@ public class TeamPanel extends JPanel implements Observable, Observer {
                             rename_dialog.setTitle(teams.get(i).substring(0, teams.get(i).length() - 4) + " team's new name");
                             rename_dialog.setUndecorated(true);
                             rename_dialog.setLocation(DEFAULT_X_RESOLUTION.getSIZE() / 2, DEFAULT_Y_RESOLUTION.getSIZE() / 2);
-                            JTextArea  enter_name = new JTextArea("Enter new team's name in the field below, then press [ENTER]");
+                            JTextArea  enter_name = new JTextArea("Enter new name in the field below, then press [ENTER]");
                             enter_name.setEditable(false);
                             enter_name.setPreferredSize(new Dimension(400,70));
                             enter_name.setMaximumSize(new Dimension(400,50));
@@ -350,13 +352,10 @@ public class TeamPanel extends JPanel implements Observable, Observer {
                             new_name.setOpaque(true);
                             new_name.setVisible(true);
                             new_name.setVisible(true);
-                            new_name.addActionListener(new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    String name_written =  new_name.getText();
-                                    TeamPanel.this.notify(new ReplaceName(teams.get(i),name_written+".txt"));
-                                    rename_dialog.dispose();
-                                }
+                            new_name.addActionListener(e1 -> {
+                                String name_written =  new_name.getText();
+                                TeamPanel.this.notify(new ReplaceName(teams.get(i),name_written+".txt"));
+                                rename_dialog.dispose();
                             });
                             rename_dialog.setModal(true);
                             rename_dialog.add(new_name,menuconstraints);

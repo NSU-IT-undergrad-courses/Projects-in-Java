@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static org.example.GameConstants.*;
@@ -25,7 +26,7 @@ public class TeamController implements Observable, Observer{
         teams =  new ArrayList<String>();
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(listOfFiles).length; i++) {
             if (listOfFiles[i].isFile()) {
                 teams.add(listOfFiles[i].getName());
             }
@@ -56,16 +57,15 @@ public class TeamController implements Observable, Observer{
     public void handle(Event e) {
         if (e instanceof  ReplaceName){
             ReplaceTeamName(((ReplaceName) e).getPrevious(),((ReplaceName) e).getEdited());
-            getTeams();
         }
         if (e instanceof DeleteTeam){
             DeleteSelectedTeam(((DeleteTeam) e).getTeam_name());
         }
         if (e instanceof CreateNewTeam){
             CreateDeafultTeam();
-            getTeams();
         }
         if (e instanceof NewStatsMessage){
+            System.out.println(CheckStats(((NewStatsMessage) e).getChangedstats()));
             if (CheckStats(((NewStatsMessage) e).getChangedstats())){
                 stats = ((NewStatsMessage) e).getChangedstats();
                 WriteTeamChanges(stats, current_team);
@@ -84,6 +84,7 @@ public class TeamController implements Observable, Observer{
         File previousTeam = new File(TEAM.getDEFAULT_PATH_FILE()+previous);
         File editedTeam = new File(TEAM.getDEFAULT_PATH_FILE()+edited);
         previousTeam.renameTo(editedTeam);
+        getTeams();
     }
 
     private void DeleteSelectedTeam(String teamName) {
@@ -103,10 +104,11 @@ public class TeamController implements Observable, Observer{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        getTeams();
     }
 
     private void WriteTeamChanges(List<String[]> stats, String currentTeam) {
-        InputStream previous = getClass().getResourceAsStream("/team/" +currentTeam);
+        InputStream previous = getClass().getResourceAsStream(TEAM.getDEFAULT_PATH_RESOURCE() +currentTeam);
         Scanner scanner = new Scanner(previous);
         String [] previous_figures = new String[24];
         for (int i = 0; i < 8; i++){
@@ -169,7 +171,7 @@ public class TeamController implements Observable, Observer{
     }
 
     private void GetSelectedStats() {
-        InputStream selectedteam = getClass().getResourceAsStream("/team/" +current_team);
+        InputStream selectedteam = getClass().getResourceAsStream(TEAM.getDEFAULT_PATH_RESOURCE() +current_team);
         assert selectedteam != null;
         Scanner scanner = new Scanner(selectedteam);
         stats = new ArrayList<String []>();
