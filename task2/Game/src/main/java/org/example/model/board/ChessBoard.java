@@ -15,13 +15,7 @@ public class ChessBoard implements board {
     }
 
     private ArrayList<Figure> board;
-    private final Integer length = 8;
     private final Integer width = 8;
-
-    @Override
-    public ArrayList<Figure> getBoard() {
-        return board;
-    }
 
     @Override
     public void setBoard(ArrayList<Figure> Figures) {

@@ -7,7 +7,6 @@ public interface Observer {
     /**
      * Обработать событие.
      *
-     * @param e
      */
     void handle(Event e);
 }

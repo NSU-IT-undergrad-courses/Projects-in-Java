@@ -1,16 +1,14 @@
 package org.example.controllers;
 
-import org.example.GameConstants;
+import org.example.GameConfiguration;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.AvailableTeamsRequest;
 import org.example.observer.event.boardcreator.BoardCreatorEvent;
 import org.example.observer.event.screens.GameStopEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.RestartGameEvent;
 import org.example.observer.event.session.GameSessionEvent;
-import org.example.observer.event.session.RequestStatsEvent;
 import org.example.observer.event.team.TeamEvent;
 
 import java.util.ArrayList;
@@ -66,13 +64,13 @@ public class RootController implements Observer, Observable {
             Start();
         }
         if (e instanceof PlacePanelEvent) {
-            if (Objects.equals(((PlacePanelEvent) e).getSource(), GameConstants.OFFLINE.getPANEL_INDEX())) {
+            if (Objects.equals(((PlacePanelEvent) e).getSource(), GameConfiguration.OFFLINE.getPANEL_INDEX())) {
                 sessioncontroller.StartGame();
             }
         }
     }
 
     public void Start() {
-        notify(new PlacePanelEvent(GameConstants.START.getPANEL_INDEX()));
+        notify(new PlacePanelEvent(GameConfiguration.START.getPANEL_INDEX()));
     }
 }

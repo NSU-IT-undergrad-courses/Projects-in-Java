@@ -8,9 +8,10 @@ import org.example.observer.event.screens.GameSessionStartEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.SetLooknFeelEvent;
 import org.example.observer.event.session.GameSessionEvent;
-import org.example.observer.event.session.ReleaseStatsEvent;
-import org.example.observer.event.session.StatsMessageEvent;
+import org.example.observer.event.session.view.ReleaseStatsListenerEvent;
+import org.example.observer.event.session.controller.StatsMessage;
 import org.example.observer.event.team.TeamEvent;
+import org.example.view.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static org.example.GameConstants.*;
+import static org.example.GameConfiguration.*;
 
 public class RootViewComponent extends JFrame implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
@@ -49,9 +50,9 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
                     throw new RuntimeException(ex);
                 }
                 PlacePanel(OFFLINE.getPANEL_INDEX());
-            } else if (e instanceof StatsMessageEvent) {
+            } else if (e instanceof StatsMessage) {
                 ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
-            } else if (e instanceof ReleaseStatsEvent) {
+            } else if (e instanceof ReleaseStatsListenerEvent) {
                 ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
             } else {
                 ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
@@ -130,6 +131,7 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
         panels[BOARDCREATOR.getPANEL_INDEX()] = new BoardCreatorPanel();
         panels[TEAM.getPANEL_INDEX()] = new TeamPanel();
         panels[SCORES.getPANEL_INDEX()] = new ScoresPanel();
+        panels[FAQ.getPANEL_INDEX()] = new FaqPanel();
     }
 
     @Override
@@ -152,6 +154,9 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
 
         ((Observable)panels[PROFILES.getPANEL_INDEX()]).register(o);
         ((Observable)panels[PROFILES.getPANEL_INDEX()]).register(this);
+
+        ((Observable)panels[FAQ.getPANEL_INDEX()]).register(o);
+        ((Observable)panels[FAQ.getPANEL_INDEX()]).register(this);
 
     }
 

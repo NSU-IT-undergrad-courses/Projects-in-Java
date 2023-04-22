@@ -1,7 +1,5 @@
 package org.example.model.figure;
 
-import org.example.model.figure.Figure;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +14,10 @@ public class HorseFigure implements Figure {
 
     private Integer isWhite;
 
-    public HorseFigure(String name, Integer attack, Integer defense, Integer isWhite) {
-        this.name = name;
-        this.attack = attack;
-        this.defense = defense;
-        this.isWhite = isWhite;
-    }
-
     private String name;
     private Integer attack;
     private Integer defense;
-    private final List<Integer> trace = new ArrayList<Integer>();
+    private final List<Integer> trace = new ArrayList<>();
 
     @Override
     public String getName() {

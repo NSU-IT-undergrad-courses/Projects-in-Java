@@ -1,7 +1,5 @@
 package org.example.model.figure;
 
-import org.example.model.figure.Figure;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +14,6 @@ public class ForwardFigure implements Figure {
 
     private Integer isWhite;
 
-    public ForwardFigure(String name, Integer attack, Integer defense, Integer isWhite) {
-        this.name = name;
-        this.attack = attack;
-        this.defense = defense;
-        this.isWhite = isWhite;
-    }
-
     public ForwardFigure() {
         this.name = "NOTFOUND";
         this.attack = 0;
@@ -33,7 +24,7 @@ public class ForwardFigure implements Figure {
     private Integer attack;
     private Integer defense;
 
-    private final List<Integer> trace = new ArrayList<Integer>();
+    private final List<Integer> trace = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -72,8 +63,8 @@ public class ForwardFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        for (int i = 0; i < trace_arguments.length; i++) {
-            Integer move = Integer.valueOf(trace_arguments[i]);
+        for (String traceArgument : trace_arguments) {
+            Integer move = Integer.valueOf(traceArgument);
             this.trace.add(0);
             this.trace.add(move);
         }

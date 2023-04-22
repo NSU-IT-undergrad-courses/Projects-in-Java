@@ -1,24 +1,15 @@
 package org.example.model.figure;
 
-import org.example.model.figure.Figure;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CellFigure implements Figure {
-    public CellFigure(String name, Integer attack, Integer defense) {
-        this.name = name;
-        this.attack = attack;
-        this.defense = defense;
-    }
 
     private String name;
     private Integer attack;
     private Integer defense;
 
-    private String move;
-
-    private final ArrayList<Integer> trace = new ArrayList<Integer>();
+    private final ArrayList<Integer> trace = new ArrayList<>();
 
     @Override
     public String getName() {

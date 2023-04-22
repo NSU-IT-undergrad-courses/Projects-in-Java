@@ -1,0 +1,32 @@
+rook#4#2#horse#1 2
+horse#3#2#horse#1 2
+bishop#4#1#horse#1 2
+queen#4#4#horse#1 2
+king#1#1#horse#1 2
+bishop#4#1#horse#1 2
+horse#3#2#horse#1 2
+rook#4#2#horse#1 2
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+pawn#1#1#forward#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1
+cell#0#0#cell#1

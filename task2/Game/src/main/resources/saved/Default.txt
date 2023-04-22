@@ -1,11 +1,11 @@
-crook#4#2#crosshair#1 2 3 4 5 6 7
+rook#4#2#crosshair#1 2 3 4 5 6 7
 horse#3#2#horse#1 2
 bishop#4#1#diagonal#1 2 3 4 5 6 7
 queen#4#4#queen#1 2 3 4 5 6 7
 king#1#1#queen#1
 bishop#4#1#diagonal#1 2 3 4 5 6 7
 horse#3#2#horse#1
-crook#4#2#crosshair#1 2 3 4 5 6 7
+rook#4#2#crosshair#1 2 3 4 5 6 7
 pawn#1#1#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1

@@ -5,7 +5,6 @@ import org.example.model.figure.Figure;
 import java.util.ArrayList;
 
 public interface board {
-    ArrayList<Figure> getBoard();
 
     void setBoard(ArrayList<Figure> Figures);
 

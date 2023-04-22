@@ -2,21 +2,20 @@ package org.example.model.figure;
 import java.util.ArrayList;
 import java.util.List;
 public class DiagonalFigure implements Figure {
+    public DiagonalFigure() {
+        this.name = "NONDEFINED";
+        this.attack = 0;
+        this.defense = 0;
+    }
     public Integer getWhite() {
         return isWhite;
     }
     public void setWhite(Integer white) {
         isWhite = white;
     }
-    public void setTrace(List<Integer> trace) {
-        this.trace = trace;
-    }
+
     private Integer isWhite;
-    public DiagonalFigure() {
-        this.name = "NONDEFINED";
-        this.attack = 0;
-        this.defense = 0;
-    }
+
     public DiagonalFigure(String name, Integer attack, Integer defense, Integer isWhite) {
         this.name = name;
         this.attack = attack;
@@ -26,7 +25,7 @@ public class DiagonalFigure implements Figure {
     private String name;
     private Integer attack;
     private Integer defense;
-    private List<Integer> trace = new ArrayList<Integer>();
+    private final List<Integer> trace = new ArrayList<>();
     @Override
     public String getName() {
         return name;
@@ -57,8 +56,8 @@ public class DiagonalFigure implements Figure {
     }
     @Override
     public void setTrace(String[] trace_arguments) {
-        for (int i = 0; i < trace_arguments.length; i++) {
-            Integer move = Integer.valueOf(trace_arguments[i]);
+        for (String traceArgument : trace_arguments) {
+            Integer move = Integer.valueOf(traceArgument);
             this.trace.add(move);
             this.trace.add(move);
             this.trace.add(-move);

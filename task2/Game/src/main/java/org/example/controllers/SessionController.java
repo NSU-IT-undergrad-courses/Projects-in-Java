@@ -1,39 +1,38 @@
 package org.example.controllers;
 
-import org.example.GameConstants;
-import org.example.model.fabric.FigureFabric;
+import org.example.GameConfiguration;
 import org.example.model.board.ChessBoard;
 import org.example.model.board.board;
-import org.example.model.figure.Figure;
+import org.example.model.fabric.FigureFabric;
 import org.example.model.figure.CellFigure;
+import org.example.model.figure.Figure;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.screens.GameSessionEndEvent;
 import org.example.observer.event.screens.GameSessionStartEvent;
-import org.example.observer.event.screens.GameStopEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
-import org.example.observer.event.session.*;
+import org.example.observer.event.session.GameSessionEvent;
+import org.example.observer.event.session.controller.*;
+import org.example.observer.event.session.view.FigureChosenListenerEvent;
+import org.example.observer.event.session.view.MovesRequest;
+import org.example.observer.event.session.view.StatsRequest;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
-import static org.example.GameConstants.*;
 
 public class SessionController implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
-    private String boardpath = OFFLINE.getDEFAULT_PATH_RESOURCE() +"createdboard.txt";
     private Integer turn = 1;
-    private List<Integer> FiguresToMove = new ArrayList<Integer>();
+    private List<Integer> FiguresToMove = new ArrayList<>();
 
     public SessionController() {
 
@@ -56,20 +55,8 @@ public class SessionController implements Observer, Observable {
         }
     }
 
-    public String getBoardpath() {
-        return boardpath;
-    }
-
-    public void setBoardpath(String boardpath) {
-        this.boardpath = boardpath;
-    }
-
     public Integer getTurn() {
         return turn;
-    }
-
-    public void setTurn(Integer turn) {
-        this.turn = turn;
     }
 
     public List<Integer> getFiguresToMove() {
@@ -84,18 +71,14 @@ public class SessionController implements Observer, Observable {
         FiguresToMove.add(figure);
     }
 
-    public void Exit() {
-
-    }
-
     public void StartGame() {
-        Clip clip = null;
+        Clip clip;
         try {
             clip = AudioSystem.getClip();
         } catch (LineUnavailableException e) {
             throw new RuntimeException(e);
         }
-        AudioInputStream inputStream = null;
+        AudioInputStream inputStream;
         try {
 
             inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/game.wav")));
@@ -108,29 +91,24 @@ public class SessionController implements Observer, Observable {
             throw new RuntimeException(e);
         }
         clip.start();
-        Board = loadBoard(boardpath);
         String[] names = new String[64];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 names[i * 8 + j] = Board.getPlace(j, i).getName();
             }
         }
-        notify(new NamesMessageEvent(names));
+        notify(new NamesMessage(names));
         notify(new GameSessionStartEvent(names));
     }
 
-    private board loadBoard(String file) {
+    private board loadBoard(String [] changes) {
         board newBoard = new ChessBoard();
-        InputStream saved = this.getClass().getResourceAsStream(file);
-        Scanner scanner;
-        scanner = new Scanner(Objects.requireNonNull(saved));
-        scanner.useDelimiter("\n\r");
         ArrayList<Figure> figures = new ArrayList<>(64);
         for (int i = 0; i < 64; i++) {
             figures.add(new CellFigure());
         }
         for (int i = 0; i < 64; i++) {
-            String figure_info = scanner.nextLine();
+            String figure_info = changes[i];
             figures.set(i, fabric.create(figure_info));
             if (i < 16) {
                 figures.get(i).setWhite(1);
@@ -140,24 +118,20 @@ public class SessionController implements Observer, Observable {
             }
         }
         newBoard.setBoard(figures);
-        try {
-            saved.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         return newBoard;
     }
 
 
     @Override
     public void handle(Event e) {
-        if (e instanceof PlacePanelEvent && Objects.equals(((PlacePanelEvent) e).getSource(), OFFLINE.getPANEL_INDEX())) {
-            StartGame();
-        }
-
         if (e instanceof GameSessionEvent) {
-            if (e instanceof FigureChosen) {
-                addFiguresToMove(((FigureChosen) e).getIndex());
+            if (e instanceof BoardSentMessage){
+                Board = loadBoard(((BoardSentMessage) e).getChanges());
+                notify(new PlacePanelEvent(GameConfiguration.OFFLINE.getPANEL_INDEX()));
+            }
+            if (e instanceof FigureChosenListenerEvent) {
+                addFiguresToMove(((FigureChosenListenerEvent) e).getIndex());
                 if (getFiguresToMove().size() == 2) {
                     Integer source = getFiguresToMove().get(0);
                     Integer destination = getFiguresToMove().get(1);
@@ -170,10 +144,10 @@ public class SessionController implements Observer, Observable {
                         for (int i = 0; i < CurrentMoves.size(); i += 2) {
                             boolean found = Objects.equals(CurrentMoves.get(i), destination_length) && Objects.equals(CurrentMoves.get(i + 1), destination_width);
                             if (found)
-                                if (Board.getPlace(destination).isWhite() == null || (Board.getPlace(destination).isWhite() != Board.getPlace(source).isWhite())) {
+                                if (Board.getPlace(destination).isWhite() == null || (!Objects.equals(Board.getPlace(destination).isWhite(), Board.getPlace(source).isWhite()))) {
                                     Integer attack = Board.getPlace(source_length, source_width).getAttack();
                                     Integer defense = Board.getPlace(destination_length, destination_width).getDefense();
-                                    if (Board.getPlace(source_length, source_width).getName().contains("horse")) {
+                                    if (Board.getPlace(source_length, source_width).getClass().getSimpleName().contains("Horse")) {
                                         turn++;
                                         MakeMove(source, source_length, source_width, destination, destination_length, destination_width, attack, defense);
                                     } else {
@@ -182,36 +156,34 @@ public class SessionController implements Observer, Observable {
                                             turn++;
                                             MakeMove(source, source_length, source_width, destination, destination_length, destination_width, attack, defense);
                                         } else {
-                                            notify(new CantPerformMoveEvent());
+                                            notify(new InvalidMoveMessage());
                                         }
                                     }
                                 }
                         }
 
                     }
-                    setFiguresToMove(new ArrayList<Integer>());
-                    notify(new ClearMovesEvent());
+                    setFiguresToMove(new ArrayList<>());
+                    notify(new ClearMovesMessage());
                 }
             }
-            if (e instanceof RequestStatsEvent) {
-                int length = ((RequestStatsEvent) e).getFigureNumber();
+            if (e instanceof StatsRequest) {
+                int length = ((StatsRequest) e).getFigureNumber();
                 int width = length / 8;
                 length %= 8;
-                if (Board.getPlace(length, width) instanceof CellFigure) {
-
-                } else {
+                if (!(Board.getPlace(length, width) instanceof CellFigure)) {
                     String name = Board.getPlace(length, width).getName();
                     Integer attack = Board.getPlace(length, width).getAttack();
                     Integer defense = Board.getPlace(length, width).getDefense();
-                    notify(new StatsMessageEvent(name, attack, defense));
+                    notify(new StatsMessage(name, attack, defense));
                 }
             }
-            if (e instanceof RequestMovesEvent) {
-                int value = ((RequestMovesEvent) e).getFigure_number();
+            if (e instanceof MovesRequest) {
+                int value = ((MovesRequest) e).getFigure_number();
                 int length = value % 8;
                 int width = value / 8;
                 Figure fig = Board.getPlace(length, width);
-                notify(new MovesMessageEvent(value, CalculateAvailableMoves(fig, length, width)));
+                notify(new MovesMessage(CalculateAvailableMoves(fig, length, width)));
             }
 
         }
@@ -225,11 +197,11 @@ public class SessionController implements Observer, Observable {
             }
             Board.setPlace(destination_length, destination_width, Board.getPlace(source_length, source_width));
             Board.setPlace(source_length, source_width, new CellFigure());
-            notify(new FigureKilledEvent(source, Board.getPlace(source_length, source_width).getName(), Board.getPlace(destination_length, destination_width).getName(), destination));
+            notify(new FigureKilledMessage(source, Board.getPlace(destination_length, destination_width).getName(), destination));
 
         } else {
             Board.getPlace(destination_length, destination_width).setDefense(defense - attack);
-            notify(new FailedAttackEvent(Board.getPlace(destination_length, destination_width).getName(), -attack));
+            notify(new FailedAttackMessage(Board.getPlace(destination_length, destination_width).getName(), -attack));
         }
     }
 
@@ -252,7 +224,7 @@ public class SessionController implements Observer, Observable {
     }
 
     private List<Integer> CalculateAvailableMoves(Figure fig, int length, int width) {
-        List<Integer> moves = new ArrayList<Integer>();
+        List<Integer> moves = new ArrayList<>();
         if (Objects.equals(fig.getName(), "cell")) {
             return moves;
         }
@@ -261,7 +233,7 @@ public class SessionController implements Observer, Observable {
             int b = width + fig.getTrace().get(i + 1);
             if (a >= 0 && a < 8 && b > -1 && b < 8) {
                 if (!Objects.equals(fig.isWhite(), Board.getPlace(a, b).isWhite())) {
-                    if ((CheckWay(length, width, a, b)) || fig.getName().contains("horse")) {
+                    if ((CheckWay(length, width, a, b)) || fig.getClass().getSimpleName().contains("Horse")) {
                         moves.add(a);
                         moves.add(b);
                     }

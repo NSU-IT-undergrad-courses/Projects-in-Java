@@ -1,16 +1,9 @@
 package org.example.model.figure;
 
-import org.example.model.figure.Figure;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CrosshairFigure implements Figure {
-    public CrosshairFigure(String name, Integer attack, Integer defense, Integer isWhite) {
-        this.name = name;
-        this.attack = attack;
-        this.defense = defense;
-    }
 
     public CrosshairFigure() {
         this.name = "NONDEFINED";
@@ -31,7 +24,7 @@ public class CrosshairFigure implements Figure {
     }
 
     private Integer isWhite;
-    private final List<Integer> trace = new ArrayList<Integer>();
+    private final List<Integer> trace = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -71,8 +64,8 @@ public class CrosshairFigure implements Figure {
 
     @Override
     public void setTrace(String[] trace_arguments) {
-        for (int i = 0; i < trace_arguments.length; i++) {
-            Integer move = Integer.valueOf(trace_arguments[i]);
+        for (String traceArgument : trace_arguments) {
+            Integer move = Integer.valueOf(traceArgument);
             this.trace.add(move);
             this.trace.add(0);
             this.trace.add(-move);
