@@ -9,6 +9,7 @@ import org.example.observer.event.boardcreator.view.TeamsRequest;
 import org.example.observer.event.boardcreator.view.ChooseTeamRequest;
 import org.example.observer.event.session.controller.BoardSentMessage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +97,12 @@ public class BoardController implements Observable, Observer {
         System.arraycopy(team2figures, 0, writtenchanges, 32, 16);
         for (int i = 0; i < 16; i++){
             writtenchanges[63-i] = team2figures[16+i];
+        }
+        try {
+            team1.close();
+            team2.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         notify(new BoardSentMessage(writtenchanges));
 

@@ -8,15 +8,14 @@ import org.example.observer.event.team.controller.TeamsMessage;
 import org.example.observer.event.team.view.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 import static org.example.GameConfiguration.*;
@@ -82,6 +81,7 @@ public class TeamController implements Observable, Observer{
         File previousTeam = new File(TEAM.getDEFAULT_PATH_FILE()+previous);
         File editedTeam = new File(TEAM.getDEFAULT_PATH_FILE()+edited);
         if (previousTeam.renameTo(editedTeam)){
+            CheckTeamDirectory(path,teams);
             getTeams();
         }
     }
@@ -98,6 +98,7 @@ public class TeamController implements Observable, Observer{
 
     private void CreateDeafultTeam() {
         try {
+            System.out.println("File copied");
             Files.copy(Paths.get(TEAM_DEFAULT.getDEFAULT_PATH_RESOURCE()), Paths.get(TEAM.getDEFAULT_PATH_FILE()+"BLANK TEAM.txt"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -106,8 +107,12 @@ public class TeamController implements Observable, Observer{
     }
 
     private void WriteTeamChanges(List<String[]> stats, String currentTeam) {
-        InputStream previous = getClass().getResourceAsStream(TEAM.getDEFAULT_PATH_RESOURCE() +currentTeam);
-        Scanner scanner = new Scanner(Objects.requireNonNull(previous));
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File(TEAM.getDEFAULT_PATH_FILE()+current_team));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         String [] previous_figures = new String[24];
         for (int i = 0; i < 8; i++){
             scanner.nextLine();
@@ -115,12 +120,7 @@ public class TeamController implements Observable, Observer{
         for (int i = 0; i < 24; i++){
             previous_figures[i] = scanner.nextLine();
         }
-        try {
-            scanner.close();
-            previous.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        scanner.close();
 
         try {
             try (FileOutputStream file = new FileOutputStream(path+currentTeam)) {
@@ -162,24 +162,19 @@ public class TeamController implements Observable, Observer{
     }
 
     private void GetSelectedStats() {
-        InputStream selectedteam = getClass().getResourceAsStream(TEAM.getDEFAULT_PATH_RESOURCE() +current_team);
-        assert selectedteam != null;
-        Scanner scanner = new Scanner(selectedteam);
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File(TEAM.getDEFAULT_PATH_FILE()+current_team));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         stats = new ArrayList<>();
         for (int i = 0; i < 5;i++){
             String [] stats_line = scanner.nextLine().split("#");
             stats.add(stats_line);
         }
-        try {
-            selectedteam.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            selectedteam.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        scanner.close();
+
         notify(new TeamStatsMessage(stats));
     }
 }
