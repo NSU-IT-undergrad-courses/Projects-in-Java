@@ -29,34 +29,14 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
 
     @Override
     public void handle(Event e) {
-        if (e instanceof BoardCreatorEvent){
-            ((Observer)panels[BOARDCREATOR.getPANEL_INDEX()]).handle(e);
-        }
-        if (e instanceof TeamEvent){
-            ((Observer)panels[TEAM.getPANEL_INDEX()]).handle(e);
-        }
         if (e instanceof SetLooknFeelEvent) {
             SetNewLookNFeel((SetLooknFeelEvent) e);
         }
         if (e instanceof PlacePanelEvent) {
             PlacePanel(((PlacePanelEvent) e).getSource());
         }
-        if (e instanceof GameSessionEvent) {
-            if (e instanceof GameSessionStartEvent) {
-                ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
-                try {
-                    TimeUnit.MILLISECONDS.sleep(50);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-                PlacePanel(OFFLINE.getPANEL_INDEX());
-            } else if (e instanceof StatsMessage) {
-                ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
-            } else if (e instanceof ReleaseStatsListenerEvent) {
-                ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
-            } else {
-                ((Observer)panels[OFFLINE.getPANEL_INDEX()]).handle(e);
-            }
+        for (int i = 0; i < panels.length; i ++){
+            ((Observer)panels[i]).handle(e);
         }
         this.pack();
     }

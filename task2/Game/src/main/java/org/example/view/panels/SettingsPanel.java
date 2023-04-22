@@ -16,7 +16,7 @@ import java.util.List;
 import static org.example.GameConfiguration.*;
 import static org.example.GameConfiguration.CreateImageIcon;
 
-public class SettingsPanel extends JPanel implements Observable {
+public class SettingsPanel extends JPanel implements Observable, Observer {
     private final String[] LookAndFeelOptions = {"Default", "Windows", "Metal", "Motion"};
 
     public SettingsPanel() {
@@ -97,5 +97,10 @@ public class SettingsPanel extends JPanel implements Observable {
         for (Observer o : observers) {
             o.handle(e);
         }
+    }
+
+    @Override
+    public void handle(Event e) {
+
     }
 }

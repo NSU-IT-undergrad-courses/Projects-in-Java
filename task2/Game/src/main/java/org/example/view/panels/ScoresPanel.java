@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoresPanel extends JPanel implements Observable {
+public class ScoresPanel extends JPanel implements Observable, Observer {
 
     public ScoresPanel() {
         initComponents();
@@ -36,6 +36,11 @@ public class ScoresPanel extends JPanel implements Observable {
         for (Observer o : observers) {
             o.handle(e);
         }
+    }
+
+    @Override
+    public void handle(Event e) {
+
     }
 }
 

@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.example.GameConfiguration.*;
 
-public class FaqPanel extends JPanel implements Observable {
+public class FaqPanel extends JPanel implements Observable, Observer {
 
     public FaqPanel() {
         initComponents();
@@ -47,5 +47,10 @@ public class FaqPanel extends JPanel implements Observable {
         for (Observer o : observers) {
             o.handle(e);
         }
+    }
+
+    @Override
+    public void handle(Event e) {
+
     }
 }

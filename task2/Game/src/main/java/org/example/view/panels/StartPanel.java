@@ -25,7 +25,7 @@ import static org.example.GameConfiguration.*;
 /**
  * @author lev
  */
-public class StartPanel extends JPanel implements Observable {
+public class StartPanel extends JPanel implements Observable, Observer {
     private final String CLICK_SOUND = "click.wav";
     private final String ALARM_SOUND = "alarm.wav";
     private final String BRUH_SOUND = "bruh.wav";
@@ -318,4 +318,8 @@ public class StartPanel extends JPanel implements Observable {
         return LinkButton;
     }
 
+    @Override
+    public void handle(Event e) {
+
+    }
 }
