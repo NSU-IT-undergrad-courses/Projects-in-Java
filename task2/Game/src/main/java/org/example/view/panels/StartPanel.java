@@ -6,6 +6,7 @@ import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.screens.GameStopEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
+import org.example.view.RootViewComponent;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -19,20 +20,22 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 import static org.example.GameConfiguration.*;
 
 /**
  * @author lev
  */
-public class StartPanel extends JPanel implements Observable, Observer {
+public class StartPanel extends GamePanel implements  Observer {
     private final String CLICK_SOUND = "click.wav";
     private final String ALARM_SOUND = "alarm.wav";
     private final String BRUH_SOUND = "bruh.wav";
 
     private final List<Observer> observers = new ArrayList<>();
 
-    public StartPanel() {
+    public StartPanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
@@ -130,19 +133,12 @@ public class StartPanel extends JPanel implements Observable, Observer {
         quit.setFocusPainted(false);
         quit.setContentAreaFilled(false);
         quit.addMouseListener(new MouseAdapter() {
-            Observable o;
             private Clip clip;
-
-            public MouseListener SetObservable(Observable o) {
-                this.o = o;
-                return this;
-            }
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 clip.stop();
                 SetActionClip(BRUH_SOUND);
-                o.notify(new GameStopEvent());
+                StartPanel.this.notify(new GameStopEvent());
             }
 
             private void SetActionClip(String bruhSound) {
@@ -176,27 +172,10 @@ public class StartPanel extends JPanel implements Observable, Observer {
                 setBackground(DEFAULT_COLOR.getCOLOR());
                 clip.stop();
             }
-        }.SetObservable(this));
+        });
         //---- Quit ----
         quit.setIcon(CreateImageIcon("/images/general/quit.png", DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE(), DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE()));
         return quit;
-    }
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
     }
 
     private JButton CreateDefaultMenuButton(GameConfiguration PAGE_CONSTANTS) {
@@ -206,12 +185,6 @@ public class StartPanel extends JPanel implements Observable, Observer {
         MenuButton.setFocusPainted(false);
         MenuButton.setContentAreaFilled(false);
         MenuButton.addMouseListener(new MouseAdapter() {
-            Observable o;
-
-            public MouseListener SetObservable(Observable o) {
-                this.o = o;
-                return this;
-            }
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -234,7 +207,7 @@ public class StartPanel extends JPanel implements Observable, Observer {
                 }
                 clip.start();
                 DeactivateButton(e);
-                o.notify(new PlacePanelEvent(PAGE_CONSTANTS.getPANEL_INDEX()));
+                StartPanel.this.notify(new PlacePanelEvent(PAGE_CONSTANTS.getPANEL_INDEX()));
             }
 
             @Override
@@ -246,7 +219,7 @@ public class StartPanel extends JPanel implements Observable, Observer {
             public void mouseExited(MouseEvent e) {
                 DeactivateButton(e);
             }
-        }.SetObservable(this));
+        });
         MenuButton.setIcon(CreateImageIcon
                 (IMG_START.getDEFAULT_PATH_RESOURCE() + PAGE_CONSTANTS.getPANEL_NAME() + ".png",
                         DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE(),
@@ -261,12 +234,6 @@ public class StartPanel extends JPanel implements Observable, Observer {
         LinkButton.setFocusPainted(false);
         LinkButton.setContentAreaFilled(false);
         LinkButton.addMouseListener(new MouseAdapter() {
-            Observable o;
-
-            public MouseListener SetObservable(Observable o) {
-                this.o = o;
-                return this;
-            }
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -310,7 +277,7 @@ public class StartPanel extends JPanel implements Observable, Observer {
             public void mouseExited(MouseEvent e) {
                 DeactivateButton(e);
             }
-        }.SetObservable(this));
+        });
         LinkButton.setIcon(CreateImageIcon
                 (IMG_START.getDEFAULT_PATH_RESOURCE() + ImagePath,
                         DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE(),

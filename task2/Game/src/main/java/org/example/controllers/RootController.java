@@ -4,12 +4,11 @@ import org.example.GameConfiguration;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.BoardCreatorEvent;
+import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.screens.GameStopEvent;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.RestartGameEvent;
-import org.example.observer.event.session.GameSessionEvent;
-import org.example.observer.event.team.TeamEvent;
+import org.example.observer.event.team.view.TeamsRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +16,13 @@ import java.util.Objects;
 
 public class RootController implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
-    private final SessionController sessioncontroller = new SessionController();
-    private final BoardController boardcreator = new BoardController();
-    private final TeamController teamcontroller = new TeamController();
+    private final SessionController sessioncontroller = new SessionController(this);
+    private final BoardController boardcreator = new BoardController(this);
+    private final TeamController teamcontroller = new TeamController(this);
 
     @Override
     public void register(Observer o) {
         observers.add(o);
-        boardcreator.register(o);
-        sessioncontroller.register(o);
-        teamcontroller.register(o);
-        boardcreator.register(this);
-        sessioncontroller.register(this);
-        teamcontroller.register(this);
-
     }
 
     @Override
@@ -40,9 +32,26 @@ public class RootController implements Observer, Observable {
 
     @Override
     public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
+        if (isMessage(e)){
+            for (Observer o : observers) {
+                if (!isController(o))
+                    o.handle(e);
+            }
         }
+        else{
+            for (Observer o : observers) {
+                if (isController(o))
+                    o.handle(e);
+            }
+        }
+    }
+
+    private boolean isController(Observer o) {
+        return o.getClass().getSimpleName().contains("Controller");
+    }
+
+    private boolean isMessage(Event e) {
+        return e.getClass().getSimpleName().contains("Message") || e.getClass().getSimpleName().contains("Event");
     }
 
     @Override
@@ -50,27 +59,21 @@ public class RootController implements Observer, Observable {
         if (e instanceof GameStopEvent) {
             System.exit(0);
         }
-        if (e instanceof BoardCreatorEvent){
-            boardcreator.handle(e);
-        }
-        if (e instanceof GameSessionEvent){
-
-            sessioncontroller.handle(e);
-        }
-        if (e instanceof TeamEvent){
-            teamcontroller.handle(e);
-        }
-        if (e instanceof RestartGameEvent) {
+        else if (e instanceof RestartGameEvent) {
             Start();
         }
-        if (e instanceof PlacePanelEvent) {
+        else if (e instanceof PlacePanelEvent) {
             if (Objects.equals(((PlacePanelEvent) e).getSource(), GameConfiguration.OFFLINE.getPANEL_INDEX())) {
                 sessioncontroller.StartGame();
             }
         }
+        else{
+        }
     }
 
     public void Start() {
+        notify(new TeamsRequest());
+        notify(new BoardTeamsRequest());
         notify(new PlacePanelEvent(GameConfiguration.START.getPANEL_INDEX()));
     }
 }

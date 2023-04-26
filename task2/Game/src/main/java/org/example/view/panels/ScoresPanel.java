@@ -1,41 +1,18 @@
 package org.example.view.panels;
 
-import org.example.GameConfiguration;
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.view.RootViewComponent;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+public class ScoresPanel extends GamePanel implements Observer {
 
-public class ScoresPanel extends JPanel implements Observable, Observer {
-
-    public ScoresPanel() {
+    public ScoresPanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
     private void initComponents() {
-        GameConfiguration.SetDefaultPanel(this,this);
-    }
-
-    private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
+        SetDefaultPanel(this);
     }
 
     @Override

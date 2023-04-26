@@ -1,11 +1,10 @@
 package org.example.controllers;
 
 import org.example.GameConfiguration;
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.controller.TeamsMessage;
-import org.example.observer.event.boardcreator.view.TeamsRequest;
+import org.example.observer.event.boardcreator.controller.BoardsTeamsMessage;
+import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.boardcreator.view.ChooseTeamRequest;
 import org.example.observer.event.session.controller.BoardSentMessage;
 
@@ -17,31 +16,18 @@ import java.util.Scanner;
 
 import static org.example.GameConfiguration.CheckTeamDirectory;
 
-public class BoardController implements Observable, Observer {
+public class BoardController extends SubController implements Observer {
     private final List<Observer> observers = new ArrayList<>();
     private final String path = GameConfiguration.TEAM.getDEFAULT_PATH_FILE();
+
+    public BoardController(RootController parent) {
+        super(parent);
+    }
 
     private void getTeams() {
         List<String> teams = new ArrayList<>();
         CheckTeamDirectory(path, teams);
-        notify(new TeamsMessage(teams));
-    }
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-        notify(new TeamsRequest());
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
+        notify(new BoardsTeamsMessage(teams));
     }
 
     @Override
@@ -49,7 +35,7 @@ public class BoardController implements Observable, Observer {
             if (e instanceof ChooseTeamRequest){
                 CreateBoard(((ChooseTeamRequest) e).getChosen());
             }
-            if (e instanceof TeamsRequest){
+            if (e instanceof BoardTeamsRequest){
                 getTeams();
             }
         }

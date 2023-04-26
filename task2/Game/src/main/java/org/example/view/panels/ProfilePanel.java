@@ -3,40 +3,18 @@ package org.example.view.panels;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.view.RootViewComponent;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+public class ProfilePanel extends GamePanel {
 
-import static org.example.GameConfiguration.SetDefaultPanel;
-
-public class ProfilePanel extends JPanel implements Observable {
-
-    public ProfilePanel() {
+    public ProfilePanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
     private void initComponents() {
-        SetDefaultPanel(this, this);
+        SetDefaultPanel(this);
 
     }
 
-    private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
-    }
 }

@@ -3,14 +3,10 @@ package org.example.view;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.BoardCreatorEvent;
-import org.example.observer.event.screens.GameSessionStartEvent;
+import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.SetLooknFeelEvent;
-import org.example.observer.event.session.GameSessionEvent;
-import org.example.observer.event.session.view.ReleaseStatsListenerEvent;
-import org.example.observer.event.session.controller.StatsMessage;
-import org.example.observer.event.team.TeamEvent;
+import org.example.observer.event.team.view.TeamsRequest;
 import org.example.view.panels.*;
 
 import javax.swing.*;
@@ -18,25 +14,24 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static org.example.GameConfiguration.*;
 
 public class RootViewComponent extends JFrame implements Observer, Observable {
     private final List<Observer> observers = new ArrayList<>();
 
-    private final JPanel [] panels = new JPanel[7];
+    private final List<GamePanel> panels = new ArrayList<>(PANELS_AMOUNT){};
 
     @Override
     public void handle(Event e) {
         if (e instanceof SetLooknFeelEvent) {
             SetNewLookNFeel((SetLooknFeelEvent) e);
         }
-        if (e instanceof PlacePanelEvent) {
+        else if (e instanceof PlacePanelEvent) {
             PlacePanel(((PlacePanelEvent) e).getSource());
         }
-        for (int i = 0; i < panels.length; i ++){
-            ((Observer)panels[i]).handle(e);
+        else {
+            notify(e);
         }
         this.pack();
     }
@@ -83,18 +78,19 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
     }
 
     private void PlacePanel(Integer index) {
-        PlacePanel(panels[index]);
+        PlacePanel(panels.get(index));
     }
 
     public RootViewComponent() {
+        boolean lnf = false;
+        this.setUndecorated(!lnf);
+        SetStartLnF();
         SetPanels();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Cursor cursor = toolkit.createCustomCursor(CreateImageIcon("/images/general/cursor.png", 25, 25).getImage(), new Point(0, 0), "Gaming Cursor");
         this.getContentPane().setCursor(cursor);
         Dimension dimension = toolkit.getScreenSize();
         this.setTitle("ChessRPG");
-        boolean lnf = false;
-        this.setUndecorated(!lnf);
         this.setSize(new Dimension(DEFAULT_X_RESOLUTION.getSIZE(), DEFAULT_Y_RESOLUTION.getSIZE()));
         int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
@@ -103,41 +99,35 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
         this.setVisible(true);
     }
 
+    private void SetStartLnF() {
+        String OS = System.getProperty("os.name").toLowerCase();
+        if (!OS.contains("win")){
+            try {
+                UIManager.setLookAndFeel(DEFAULT_LNF);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                     UnsupportedLookAndFeelException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     private void SetPanels() {
-        panels[START.getPANEL_INDEX()] = new StartPanel();
-        panels[OFFLINE.getPANEL_INDEX()] = new SessionPanel();
-        panels[SETTINGS.getPANEL_INDEX()] = new SettingsPanel();
-        panels[PROFILES.getPANEL_INDEX()] = new ProfilePanel();
-        panels[BOARDCREATOR.getPANEL_INDEX()] = new BoardCreatorPanel();
-        panels[TEAM.getPANEL_INDEX()] = new TeamPanel();
-        panels[SCORES.getPANEL_INDEX()] = new ScoresPanel();
-        panels[FAQ.getPANEL_INDEX()] = new FaqPanel();
+        for (int i = 0; i < PANELS_AMOUNT; i++){
+            panels.add(new StartPanel(this));
+        }
+        panels.set(START.getPANEL_INDEX(), new StartPanel(this));
+        panels.set(OFFLINE.getPANEL_INDEX(), new SessionPanel(this));
+        panels.set(SETTINGS.getPANEL_INDEX(), new SettingsPanel(this));
+        panels.set(PROFILES.getPANEL_INDEX(), new ProfilePanel(this));
+        panels.set(BOARDCREATOR.getPANEL_INDEX(), new BoardCreatorPanel(this));
+        panels.set(TEAM.getPANEL_INDEX(), new TeamPanel(this));
+        panels.set(SCORES.getPANEL_INDEX(), new ScoresPanel(this));
+        panels.set(FAQ.getPANEL_INDEX(), new FaqPanel(this));
     }
 
     @Override
     public void register(Observer o) {
         observers.add(o);
-        ((Observable)panels[START.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[START.getPANEL_INDEX()]).register(this);
-
-        ((Observable)panels[SETTINGS.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[SETTINGS.getPANEL_INDEX()]).register(this);
-
-        ((Observable)panels[TEAM.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[TEAM.getPANEL_INDEX()]).register(this);
-
-        ((Observable)panels[BOARDCREATOR.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[BOARDCREATOR.getPANEL_INDEX()]).register(this);
-
-        ((Observable)panels[OFFLINE.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[OFFLINE.getPANEL_INDEX()]).register(this);
-
-        ((Observable)panels[PROFILES.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[PROFILES.getPANEL_INDEX()]).register(this);
-
-        ((Observable)panels[FAQ.getPANEL_INDEX()]).register(o);
-        ((Observable)panels[FAQ.getPANEL_INDEX()]).register(this);
-
     }
 
     @Override
@@ -147,8 +137,25 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
 
     @Override
     public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
+        if (isMessage(e)){
+            for (Observer o : observers) {
+                if (isController(o))
+                    o.handle(e);
+            }
         }
+        else{
+            for (Observer o : observers) {
+                if (!isController(o))
+                    o.handle(e);
+            }
+        }
+    }
+
+    private boolean isController(Observer o) {
+        return o.getClass().getSimpleName().contains("Controller");
+    }
+
+    private boolean isMessage(Event e) {
+        return e.getClass().getSimpleName().contains("Message") || e.getClass().getSimpleName().contains("Event");
     }
 }

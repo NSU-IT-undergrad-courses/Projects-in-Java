@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.observer.Observable;
 import org.example.observer.event.screens.PlacePanelEvent;
+import org.example.view.panels.GamePanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -67,6 +68,8 @@ public enum GameConfiguration {
     }
 
     private String PANEL_NAME;
+    public static final Integer PANELS_AMOUNT = 7;
+    public static final String DEFAULT_LNF = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
     public static final String[] distance = new String[]{"1", "2", "3", "4", "5", "6", "7"};
     public static final String[] trace = new String[]{"crosshair", "diagonal", "forward", "horse", "line", "queen"};
 
@@ -91,47 +94,6 @@ public enum GameConfiguration {
 
     public Integer getPANEL_INDEX() {
         return PANEL_INDEX;
-    }
-
-    public static void SetDefaultPanel(JPanel panel, Observable observer) {
-        SetPanelSizeColor(panel);
-        GridBagLayout layout = new GridBagLayout();
-        panel.setLayout(layout);
-        GridBagConstraints constraints = new GridBagConstraints();
-        if (observer != null){
-
-        constraints.anchor = GridBagConstraints.SOUTH;
-        constraints.fill = GridBagConstraints.RELATIVE;
-        constraints.gridx = 0;
-        constraints.gridwidth = 1;
-        constraints.gridy = 8;
-        constraints.gridheight = 1;
-        JButton Quit = new JButton();
-        Quit.setOpaque(true);
-        Quit.setBorderPainted(false);
-        Quit.setFocusPainted(false);
-        Quit.setContentAreaFilled(false);
-        Quit.setVisible(true);
-        Quit.addMouseListener(new MouseAdapter() {
-            Observable o;
-
-            public MouseListener SetObservable(Observable o) {
-                this.o = o;
-                return this;
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                o.notify(new PlacePanelEvent(GameConfiguration.START.getPANEL_INDEX()));
-            }
-
-        }.SetObservable(observer));
-        panel.add(Quit, constraints);
-        panel.setVisible(true);
-
-        //---- Quit ----
-        Quit.setIcon(CreateImageIcon("/images/general/quit.png", DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE(), DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE()));
-    }
     }
 
     public static void SetPanelSizeColor(JPanel panel) {

@@ -1,24 +1,19 @@
 package org.example.view.panels;
 
-import org.example.observer.Observable;
-import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.view.RootViewComponent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+public class FaqPanel extends GamePanel{
 
-import static org.example.GameConfiguration.*;
-
-public class FaqPanel extends JPanel implements Observable, Observer {
-
-    public FaqPanel() {
+    public FaqPanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
     private void initComponents() {
-        SetDefaultPanel(this, this);
+        SetDefaultPanel(this);
         JTextArea faq = new JTextArea();
         int textwidth = 800;
         int textheight = 50;
@@ -30,27 +25,4 @@ public class FaqPanel extends JPanel implements Observable, Observer {
 
     }
 
-    private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
-    }
-
-    @Override
-    public void handle(Event e) {
-
-    }
 }

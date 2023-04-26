@@ -4,10 +4,10 @@ import org.example.observer.event.boardcreator.BoardCreatorEvent;
 
 import java.util.List;
 
-public class TeamsMessage extends BoardCreatorEvent {
+public class BoardsTeamsMessage extends BoardCreatorEvent {
     private final List<String> teams;
 
-    public TeamsMessage(List<String> teams) {
+    public BoardsTeamsMessage(List<String> teams) {
         this.teams = teams;
     }
 

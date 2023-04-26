@@ -8,6 +8,7 @@ import org.example.observer.event.screens.GameSessionStartEvent;
 import org.example.observer.event.session.*;
 import org.example.observer.event.session.controller.*;
 import org.example.observer.event.session.view.ReleaseStatsListenerEvent;
+import org.example.view.RootViewComponent;
 import org.example.view.listener.SessionMouseListener;
 
 import javax.imageio.ImageIO;
@@ -20,37 +21,20 @@ import java.util.Objects;
 
 import static org.example.GameConfiguration.*;
 
-public class SessionPanel extends JPanel implements Observer, Observable {
+public class SessionPanel extends GamePanel implements Observer {
     ArrayList<SessionMouseListener> listeners = new ArrayList<>(64);
     JButton[] figures = new JButton[64];
     private JWindow Stats = new JWindow();
     private String[] names = new String[64];
 
-    public SessionPanel() {
-        SetDefaultPanel(this, null);
+    public SessionPanel(RootViewComponent parent) {
+        super(parent);
+        SetDefaultPanel(this);
         setLayout(new GridBagLayout());
         for (int i = 0; i < 64; i++) {
             listeners.add(i, new SessionMouseListener());
             listeners.get(i).setIndex(i);
         }
-    }
-
-    public void register(Observer o) {
-        for (int i = 0; i < 64; i++) {
-            listeners.get(i).register(o);
-        }
-    }
-
-    @Override
-    public void remove(Observer o) {
-        for (int i = 0; i < 64; i++) {
-            listeners.get(i).remove(o);
-        }
-    }
-
-    @Override
-    public void notify(Event e) {
-
     }
 
     @Override

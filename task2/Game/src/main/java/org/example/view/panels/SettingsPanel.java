@@ -4,6 +4,7 @@ import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.screens.SetLooknFeelEvent;
+import org.example.view.RootViewComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,15 +17,16 @@ import java.util.List;
 import static org.example.GameConfiguration.*;
 import static org.example.GameConfiguration.CreateImageIcon;
 
-public class SettingsPanel extends JPanel implements Observable, Observer {
+public class SettingsPanel extends GamePanel implements Observer {
     private final String[] LookAndFeelOptions = {"Default", "Windows", "Metal", "Motion"};
 
-    public SettingsPanel() {
+    public SettingsPanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
     private void initComponents() {
-        SetDefaultPanel(this,this);
+        SetDefaultPanel(this);
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.weightx = 1.0f;
@@ -51,18 +53,12 @@ public class SettingsPanel extends JPanel implements Observable, Observer {
                 radio.setSelected(true);
             }
             radio.addMouseListener(new MouseAdapter() {
-                Observable o;
-
-                public MouseListener SetObservable(Observable o) {
-                    this.o = o;
-                    return this;
-                }
 
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     SettingsPanel.this.notify(new SetLooknFeelEvent((JRadioButton) e.getSource()));
                 }
-            }.SetObservable(this));
+            });
             radio.setOpaque(true);
             radio.setBorderPainted(false);
             radio.setFocusPainted(false);
@@ -77,25 +73,6 @@ public class SettingsPanel extends JPanel implements Observable, Observer {
             LnF.add(radio);
             this.add(radio, constraints);
             constraints.gridy++;
-        }
-    }
-
-    private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
         }
     }
 

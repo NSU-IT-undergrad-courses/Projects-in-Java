@@ -3,9 +3,11 @@ package org.example.view.panels;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.team.controller.TeamStatsMessage;
 import org.example.observer.event.team.controller.TeamsMessage;
 import org.example.observer.event.team.view.*;
+import org.example.view.RootViewComponent;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -19,19 +21,20 @@ import java.util.List;
 import static java.awt.Font.BOLD;
 import static org.example.GameConfiguration.*;
 
-public class TeamPanel extends JPanel implements Observable, Observer {
+public class TeamPanel extends GamePanel implements Observer {
     private List<String> teams = new ArrayList<>();
     private final String TEAM_ICON = "team_logo.png";
     private final String[] figures = new String[]{"rook", "horse", "bishop", "queen", "king"};
     private final String[] stats = new String[]{"attack", "defense", "trace", "distance"};
     private List<String[]> changedstats = new ArrayList<>();
 
-    public TeamPanel() {
+    public TeamPanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
     private void initComponents() {
-        SetDefaultPanel(this,this);
+        SetDefaultPanel(this);
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -81,27 +84,6 @@ public class TeamPanel extends JPanel implements Observable, Observer {
         }
     }
 
-
-    private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-        notify(new TeamsRequest());
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
-    }
-
     @Override
     public void handle(Event e) {
         if (e instanceof TeamsMessage) {
@@ -116,7 +98,7 @@ public class TeamPanel extends JPanel implements Observable, Observer {
 
     private void RefreshPanel() {
         this.removeAll();
-        SetDefaultPanel(this,this);
+        SetDefaultPanel(this);
         DrawTeams();
         DrawFigures(new GridBagConstraints());
         CreateStats();
@@ -215,13 +197,10 @@ public class TeamPanel extends JPanel implements Observable, Observer {
         SetTeamButtonSettings(team, menuconstraints);
         this.add(team, menuconstraints);
         team.addMouseListener(new MouseAdapter() {
-            Observable o;
-
             String file_name;
             Integer index;
 
-            public MouseAdapter Init(Observable o, String file_name, Integer i) {
-                this.o = o;
+            public MouseAdapter Init(String file_name, Integer i) {
                 this.file_name = file_name;
                 index = i;
                 return this;
@@ -232,7 +211,7 @@ public class TeamPanel extends JPanel implements Observable, Observer {
                 TeamPanel.this.notify(new CreateNewTeamRequest());
             }
 
-        }.Init(this, "Create new", teams.size() + 1));
+        }.Init("Create new", teams.size() + 1));
     }
 
     private void CreateTeamLine(int i) {
@@ -245,13 +224,11 @@ public class TeamPanel extends JPanel implements Observable, Observer {
         menuconstraints.gridy = i + 2;
         SetTeamButtonSettings(team, menuconstraints);
         team.addMouseListener(new MouseAdapter() {
-            Observable o;
 
             String file_name;
             Integer index;
 
-            public MouseAdapter Init(Observable o, String file_name, Integer i) {
-                this.o = o;
+            public MouseAdapter Init(String file_name, Integer i) {
                 this.file_name = file_name;
                 index = i;
                 return this;
@@ -352,7 +329,7 @@ public class TeamPanel extends JPanel implements Observable, Observer {
                 RequestTeamFigures(((JButton) e.getSource()).getText());
             }
 
-        }.Init(this, teams.get(i), i));
+        }.Init(teams.get(i), i));
         this.add(team, menuconstraints);
     }
 

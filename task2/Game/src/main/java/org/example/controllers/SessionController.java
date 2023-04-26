@@ -27,32 +27,15 @@ import java.util.Objects;
 import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 
-public class SessionController implements Observer, Observable {
+public class SessionController extends SubController implements Observer {
     private final List<Observer> observers = new ArrayList<>();
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
     private Integer turn = 1;
     private List<Integer> FiguresToMove = new ArrayList<>();
 
-    public SessionController() {
-
-    }
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
+    public SessionController(RootController parent) {
+        super(parent);
     }
 
     public Integer getTurn() {

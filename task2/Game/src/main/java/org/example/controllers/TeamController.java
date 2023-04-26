@@ -20,11 +20,16 @@ import java.util.Scanner;
 
 import static org.example.GameConfiguration.*;
 
-public class TeamController implements Observable, Observer{
+public class TeamController extends SubController implements Observer{
     private final String path = TEAM.getDEFAULT_PATH_FILE();
     private List<String> teams = new ArrayList<>();
     private List<String []>stats = new ArrayList<>();
     private String current_team;
+
+    public TeamController(RootController parent) {
+        super(parent);
+    }
+
     private void getTeams() {
         teams = new ArrayList<>();
         CheckTeamDirectory(path, teams);
@@ -33,23 +38,6 @@ public class TeamController implements Observable, Observer{
 
 
     private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
-    }
 
     @Override
     public void handle(Event e) {
@@ -98,7 +86,6 @@ public class TeamController implements Observable, Observer{
 
     private void CreateDeafultTeam() {
         try {
-            System.out.println("File copied");
             Files.copy(Paths.get(TEAM_DEFAULT.getDEFAULT_PATH_RESOURCE()), Paths.get(TEAM.getDEFAULT_PATH_FILE()+"BLANK TEAM.txt"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);

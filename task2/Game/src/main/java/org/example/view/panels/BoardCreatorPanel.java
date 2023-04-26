@@ -3,8 +3,11 @@ package org.example.view.panels;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.controller.TeamsMessage;
+import org.example.observer.event.boardcreator.controller.BoardsTeamsMessage;
+import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.boardcreator.view.ChooseTeamRequest;
+import org.example.observer.event.team.view.TeamsRequest;
+import org.example.view.RootViewComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +18,7 @@ import java.util.List;
 
 import static org.example.GameConfiguration.*;
 
-public class BoardCreatorPanel extends JPanel implements Observable, Observer {
+public class BoardCreatorPanel extends GamePanel implements Observer {
     private final String ICON = "team_logo.png";
     private Boolean first = false;
     private Boolean second = false;
@@ -24,12 +27,13 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
     private JButton Start;
     private final JButton [] chosen = new JButton[2];
 
-    public BoardCreatorPanel() {
+    public BoardCreatorPanel(RootViewComponent parent) {
+        super(parent);
         initComponents();
     }
 
     private void initComponents() {
-        SetDefaultPanel(this,this);
+        SetDefaultPanel(this);
         setBackground(new Color(0x003333));
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridwidth = 1;
@@ -94,30 +98,10 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
         BoardCreatorPanel.this.revalidate();
     }
 
-
-    private final List<Observer> observers = new ArrayList<>();
-
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void remove(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void notify(Event e) {
-        for (Observer o : observers) {
-            o.handle(e);
-        }
-    }
-
     @Override
     public void handle(Event e) {
-        if (e instanceof TeamsMessage){
-            this.teams = ((TeamsMessage) e).getTeams();
+        if (e instanceof BoardsTeamsMessage){
+            this.teams = ((BoardsTeamsMessage) e).getTeams();
             CreateTeams(teams);
         }
     }
@@ -142,12 +126,10 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
             team.setContentAreaFilled(false);
             this.add(team,menuconstraints);
             team.addMouseListener(new MouseAdapter() {
-                Observable o;
 
                 String file_name;
                 Integer index;
-                public MouseAdapter Init(Observable o, String file_name, Integer i){
-                    this.o = o;
+                public MouseAdapter Init(String file_name, Integer i){
                     this.file_name = file_name;
                     index = i;
                     return this;
@@ -178,7 +160,7 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
                     CheckTeams();
                 }
 
-            }.Init(this,teams.get(i),i));
+            }.Init(teams.get(i),i));
         }
         this.revalidate();
         for (int i =0; i < teams.size(); i++){
@@ -203,8 +185,7 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
 
                 String file_name;
                 Integer index;
-                public MouseAdapter Init(Observable o, String file_name, Integer i){
-                    this.o = o;
+                public MouseAdapter Init(String file_name, Integer i){
                     this.file_name = file_name;
                     index = i;
                     return this;
@@ -235,7 +216,7 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
                     CheckTeams();
                 }
 
-            }.Init(this,teams.get(i),i));
+            }.Init(teams.get(i),i));
         }
         this.revalidate();
 
@@ -248,17 +229,12 @@ public class BoardCreatorPanel extends JPanel implements Observable, Observer {
             Start.setIcon(CreateImageIcon(IMG_BOARDCREATOR.getDEFAULT_PATH_RESOURCE()+ start,250,190));
             Start.setBorderPainted(true);
             Start.addMouseListener(new MouseAdapter() {
-                Observable o;
-                public MouseAdapter Init(Observable o){
-                    this.o = o;
-                    return this;
-                }
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    o.notify(new ChooseTeamRequest(chosen[0].getText(),chosen[1].getText()));
+                    BoardCreatorPanel.this.notify(new ChooseTeamRequest(chosen[0].getText(),chosen[1].getText()));
                 }
 
-            }.Init(this));
+            });
         }
     }
 
