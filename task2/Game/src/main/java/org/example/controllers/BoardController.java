@@ -8,6 +8,8 @@ import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.boardcreator.view.ChooseTeamRequest;
 import org.example.observer.event.session.view.LoadBoardRequest;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -40,12 +42,18 @@ public class BoardController extends SubController implements Observer {
     }
 
     private void CreateBoard(String[] chosen) {
-        InputStream team1 = getClass().getResourceAsStream(GameConfiguration.TEAM.getDEFAULT_PATH_RESOURCE()+ chosen[0] + ".txt");
-        InputStream team2 = getClass().getResourceAsStream(GameConfiguration.TEAM.getDEFAULT_PATH_RESOURCE()+ chosen[1] + ".txt");
-        assert team1 != null;
-        Scanner scanner1 = new Scanner(team1);
-        assert team2 != null;
-        Scanner scanner2 = new Scanner(team2);
+        Scanner scanner1 = null;
+        try {
+            scanner1 = new Scanner(new File(GameConfiguration.TEAM.getDEFAULT_PATH_FILE()+ chosen[0] + ".txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        Scanner scanner2 = null;
+        try {
+            scanner2 = new Scanner(new File(GameConfiguration.TEAM.getDEFAULT_PATH_FILE()+ chosen[1] + ".txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         String [] writtenchanges = new String [64];
         for (int i = 0; i < 16; i++){
             String figure = scanner1.nextLine();
@@ -83,12 +91,7 @@ public class BoardController extends SubController implements Observer {
         for (int i = 0; i < 16; i++){
             writtenchanges[63-i] = team2figures[16+i];
         }
-        try {
-            team1.close();
-            team2.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         notify(new LoadBoardRequest(writtenchanges));
 
 
