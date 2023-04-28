@@ -1,8 +1,8 @@
 package org.example.controllers;
 
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
+import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.team.controller.TeamStatsMessage;
 import org.example.observer.event.team.controller.TeamsMessage;
 import org.example.observer.event.team.view.*;
@@ -34,10 +34,9 @@ public class TeamController extends SubController implements Observer{
         teams = new ArrayList<>();
         CheckTeamDirectory(path, teams);
         notify(new TeamsMessage(teams));
+        notify(new BoardTeamsRequest());
     }
 
-
-    private final List<Observer> observers = new ArrayList<>();
 
     @Override
     public void handle(Event e) {

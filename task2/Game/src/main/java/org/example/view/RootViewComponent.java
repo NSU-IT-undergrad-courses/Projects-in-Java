@@ -3,10 +3,8 @@ package org.example.view;
 import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.SetLooknFeelEvent;
-import org.example.observer.event.team.view.TeamsRequest;
 import org.example.view.panels.*;
 
 import javax.swing.*;
@@ -139,20 +137,22 @@ public class RootViewComponent extends JFrame implements Observer, Observable {
     public void notify(Event e) {
         if (isMessage(e)){
             for (Observer o : observers) {
-                if (isController(o))
-                    o.handle(e);
+            if (isGamePanel(o)){
+                o.handle(e);
             }
+        }
         }
         else{
             for (Observer o : observers) {
-                if (!isController(o))
+                if (!isGamePanel(o)){
                     o.handle(e);
-            }
+                }
+        }
         }
     }
 
-    private boolean isController(Observer o) {
-        return o.getClass().getSimpleName().contains("Controller");
+    private boolean isGamePanel(Observer o) {
+        return o.getClass().getSimpleName().contains("Panel");
     }
 
     private boolean isMessage(Event e) {

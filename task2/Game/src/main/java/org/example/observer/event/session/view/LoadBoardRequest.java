@@ -1,9 +1,9 @@
-package org.example.observer.event.session.controller;
+package org.example.observer.event.session.view;
 
 import org.example.observer.event.session.GameSessionEvent;
 
-public class BoardSentMessage extends GameSessionEvent {
-    public BoardSentMessage(String[] changes) {
+public class LoadBoardRequest extends GameSessionEvent {
+    public LoadBoardRequest(String[] changes) {
         this.changes = changes;
     }
 

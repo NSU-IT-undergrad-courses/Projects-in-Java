@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements  Observer{
 
     public GamePanel(RootViewComponent parent) {
         this.parent = parent;
-        parent.register((Observer) this);
+        parent.register(this);
     }
     public void SetDefaultPanel(GamePanel panel) {
         SetPanelSizeColor(panel);
@@ -52,9 +52,8 @@ public class GamePanel extends JPanel implements  Observer{
         Quit.setIcon(CreateImageIcon("/images/general/quit.png", DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE(), DEFAULT_INTERFACE_BUTTON_SIZE.getSIZE()));
     }
 
-    void notify(Event e) {
+    public void notify(Event e) {
         parent.handle(e);
-        parent.notify(e);
     }
 
     @Override

@@ -1,0 +1,48 @@
+Welcome to ChessRPG!
+ChessRPG is a board game with chess-based rules, there you can customize your figures with: trace, distance, attack and defense they have.
+(Currently available for all figures except pawns.). In this version players can create, rename and customize boards for offline mode sessions
+Screens:
+[MAIN]:
+[Profiles]
+                            [Offline][ Online]
+                            [ Team  ][  FAQ  ]
+                    [GitHub][Settings][Scores][Creator]
+[Quit]
+
+>Offline: opens board-setup for offline session
+>Online: currently unavailable, jumps to Offline
+>Settings: there you can set LookAndFeel by toggling according buttons
+Best LnF's for different OS: Windows - default, Mac OS - Motion
+>GitHub: opens Project's GitHub in default browser
+>Creator: opens telegram link for communication
+>Quit: press to close the game
+>Scores, Profiles: In development
+
+[Team]:
+Click on team to customize it
+Table in right side for customization of figures in curent team
+Possible values:
+Attack: [0,9]
+Defense: [0,9]
+0 in attack means that figure can only move
+0 in defense - figure can be killed by any enemy
+Trace: [forward],[line],[diagonal],[crosshair],[horse],[queen]
+Forward - move forward in available distances
+Line - move forward and backward in available distances
+Diagonal - move like a bishop in available distances
+Crosshair - move horizontal and vertical in available distances
+Horse - move like a horse(knight), only L-shape moves
+Queen - move in any direction in available distances
+
+To rename and delete teams, double-click on team.To create new, press [Create new] and rename [BLANK TEAM]
+
+[GAME]:
+To check available moves, click on the figure.
+To make a move choose two figures, from and to you want to move.
+If yours attack is lower than enemy's defense, enemy will be damaged, figures will not move, your turn will go to enemy.
+In order to win you need to clearly cut down the enemy's king.
+To change field size, press on [SIZE-BUTTONS] on the right.
+Size changes takes up to 15 seconds to reload the field, please be patient.
+To quit game session double-click on [QUIT].
+
+

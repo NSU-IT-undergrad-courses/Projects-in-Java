@@ -1,10 +1,9 @@
 package org.example.view.panels;
 
 import org.example.GameConfiguration;
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
-import org.example.observer.event.screens.GameStopEvent;
+import org.example.observer.event.screens.GameStopRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.view.RootViewComponent;
 
@@ -13,14 +12,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static org.example.GameConfiguration.*;
 
@@ -31,8 +28,6 @@ public class StartPanel extends GamePanel implements  Observer {
     private final String CLICK_SOUND = "click.wav";
     private final String ALARM_SOUND = "alarm.wav";
     private final String BRUH_SOUND = "bruh.wav";
-
-    private final List<Observer> observers = new ArrayList<>();
 
     public StartPanel(RootViewComponent parent) {
         super(parent);
@@ -138,27 +133,22 @@ public class StartPanel extends GamePanel implements  Observer {
             public void mouseClicked(MouseEvent e) {
                 clip.stop();
                 SetActionClip(BRUH_SOUND);
-                StartPanel.this.notify(new GameStopEvent());
+                StartPanel.this.notify(new GameStopRequest());
             }
 
             private void SetActionClip(String bruhSound) {
-                AudioInputStream audioInputStream;
+                InputStream audioSrc = getClass().getResourceAsStream("/sound/" + bruhSound);
+                assert audioSrc != null;
+                InputStream bufferedIn = new BufferedInputStream(audioSrc);
+                AudioInputStream audioStream;
                 try {
-                    audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/" + bruhSound)));
-                } catch (UnsupportedAudioFileException | IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                try {
+                    audioStream = AudioSystem.getAudioInputStream(bufferedIn);
                     clip = AudioSystem.getClip();
-                } catch (LineUnavailableException ex) {
+                    clip.open(audioStream);
+                    clip.start();
+                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                try {
-                    clip.open(audioInputStream);
-                } catch (LineUnavailableException | IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                clip.start();
             }
 
             @Override
@@ -188,26 +178,23 @@ public class StartPanel extends GamePanel implements  Observer {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                AudioInputStream audioInputStream;
+
+                //read audio data from whatever source (file/classloader/etc.)
+                InputStream audioSrc = getClass().getResourceAsStream("/sound/" + CLICK_SOUND);
+                assert audioSrc != null;
+                InputStream bufferedIn = new BufferedInputStream(audioSrc);
+                AudioInputStream audioStream;
                 try {
-                    audioInputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/" + CLICK_SOUND)));
-                } catch (UnsupportedAudioFileException | IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                Clip clip;
-                try {
+                    audioStream = AudioSystem.getAudioInputStream(bufferedIn);
+                    Clip clip;
                     clip = AudioSystem.getClip();
-                } catch (LineUnavailableException ex) {
+                    clip.open(audioStream);
+                    clip.start();
+                    DeactivateButton(e);
+                    StartPanel.this.notify(new PlacePanelEvent(PAGE_CONSTANTS.getPANEL_INDEX()));
+                } catch (UnsupportedAudioFileException | LineUnavailableException | IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                try {
-                    clip.open(audioInputStream);
-                } catch (LineUnavailableException | IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                clip.start();
-                DeactivateButton(e);
-                StartPanel.this.notify(new PlacePanelEvent(PAGE_CONSTANTS.getPANEL_INDEX()));
             }
 
             @Override

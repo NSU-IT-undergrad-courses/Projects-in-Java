@@ -5,7 +5,7 @@ import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
-import org.example.observer.event.screens.GameStopEvent;
+import org.example.observer.event.screens.GameStopRequest;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.screens.RestartGameEvent;
 import org.example.observer.event.team.view.TeamsRequest;
@@ -32,15 +32,15 @@ public class RootController implements Observer, Observable {
 
     @Override
     public void notify(Event e) {
-        if (isMessage(e)){
+        if (Request(e)){
             for (Observer o : observers) {
-                if (!isController(o))
+                if (isController(o))
                     o.handle(e);
             }
         }
         else{
             for (Observer o : observers) {
-                if (isController(o))
+                if (!isController(o))
                     o.handle(e);
             }
         }
@@ -50,13 +50,13 @@ public class RootController implements Observer, Observable {
         return o.getClass().getSimpleName().contains("Controller");
     }
 
-    private boolean isMessage(Event e) {
-        return e.getClass().getSimpleName().contains("Message") || e.getClass().getSimpleName().contains("Event");
+    private boolean Request(Event e) {
+        return e.getClass().getSimpleName().contains("Request");
     }
 
     @Override
     public void handle(Event e) {
-        if (e instanceof GameStopEvent) {
+        if (e instanceof GameStopRequest) {
             System.exit(0);
         }
         else if (e instanceof RestartGameEvent) {
@@ -68,6 +68,7 @@ public class RootController implements Observer, Observable {
             }
         }
         else{
+            notify(e);
         }
     }
 

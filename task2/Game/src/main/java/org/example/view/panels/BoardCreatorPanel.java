@@ -1,12 +1,9 @@
 package org.example.view.panels;
 
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.controller.BoardsTeamsMessage;
-import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.boardcreator.view.ChooseTeamRequest;
-import org.example.observer.event.team.view.TeamsRequest;
 import org.example.view.RootViewComponent;
 
 import javax.swing.*;
@@ -16,7 +13,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.GameConfiguration.*;
+import static org.example.GameConfiguration.CreateImageIcon;
+import static org.example.GameConfiguration.IMG_BOARDCREATOR;
 
 public class BoardCreatorPanel extends GamePanel implements Observer {
     private final String ICON = "team_logo.png";
@@ -25,7 +23,7 @@ public class BoardCreatorPanel extends GamePanel implements Observer {
 
     List<String> teams = new ArrayList<>();
     private JButton Start;
-    private final JButton [] chosen = new JButton[2];
+    private JButton [] chosen = new JButton[2];
 
     public BoardCreatorPanel(RootViewComponent parent) {
         super(parent);
@@ -101,6 +99,8 @@ public class BoardCreatorPanel extends GamePanel implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof BoardsTeamsMessage){
+            this.removeAll();
+            initComponents();
             this.teams = ((BoardsTeamsMessage) e).getTeams();
             CreateTeams(teams);
         }
@@ -181,8 +181,6 @@ public class BoardCreatorPanel extends GamePanel implements Observer {
             team.setContentAreaFilled(false);
             this.add(team,menuconstraints);
             team.addMouseListener(new MouseAdapter() {
-                Observable o;
-
                 String file_name;
                 Integer index;
                 public MouseAdapter Init(String file_name, Integer i){
@@ -232,6 +230,11 @@ public class BoardCreatorPanel extends GamePanel implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     BoardCreatorPanel.this.notify(new ChooseTeamRequest(chosen[0].getText(),chosen[1].getText()));
+                    chosen   = new JButton[2];
+                    first = second = false;
+                    BoardCreatorPanel.this.removeAll();
+                    initComponents();
+                    CreateTeams(teams);
                 }
 
             });

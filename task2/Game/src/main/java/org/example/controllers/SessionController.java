@@ -6,20 +6,18 @@ import org.example.model.board.board;
 import org.example.model.fabric.FigureFabric;
 import org.example.model.figure.CellFigure;
 import org.example.model.figure.Figure;
-import org.example.observer.Observable;
 import org.example.observer.Observer;
 import org.example.observer.event.Event;
 import org.example.observer.event.screens.GameSessionEndEvent;
-import org.example.observer.event.screens.GameSessionStartEvent;
+import org.example.observer.event.screens.GameSessionStartMessage;
 import org.example.observer.event.screens.PlacePanelEvent;
 import org.example.observer.event.session.GameSessionEvent;
 import org.example.observer.event.session.controller.*;
-import org.example.observer.event.session.view.FigureChosenListenerEvent;
+import org.example.observer.event.session.view.ChooseFigureListenerRequest;
+import org.example.observer.event.session.view.LoadBoardRequest;
 import org.example.observer.event.session.view.MovesRequest;
 import org.example.observer.event.session.view.StatsRequest;
 
-import javax.sound.sampled.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +26,6 @@ import static java.lang.Integer.signum;
 import static java.lang.Math.abs;
 
 public class SessionController extends SubController implements Observer {
-    private final List<Observer> observers = new ArrayList<>();
     private final FigureFabric fabric = new FigureFabric("/fabric/types.properties");
     private board Board = new ChessBoard();
     private Integer turn = 1;
@@ -55,25 +52,6 @@ public class SessionController extends SubController implements Observer {
     }
 
     public void StartGame() {
-        Clip clip;
-        try {
-            clip = AudioSystem.getClip();
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
-        }
-        AudioInputStream inputStream;
-        try {
-
-            inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/sound/game.wav")));
-        } catch (UnsupportedAudioFileException | IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            clip.open(inputStream);
-        } catch (LineUnavailableException | IOException e) {
-            throw new RuntimeException(e);
-        }
-        clip.start();
         String[] names = new String[64];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -81,7 +59,7 @@ public class SessionController extends SubController implements Observer {
             }
         }
         notify(new NamesMessage(names));
-        notify(new GameSessionStartEvent(names));
+        notify(new GameSessionStartMessage(names));
     }
 
     private board loadBoard(String [] changes) {
@@ -109,12 +87,13 @@ public class SessionController extends SubController implements Observer {
     @Override
     public void handle(Event e) {
         if (e instanceof GameSessionEvent) {
-            if (e instanceof BoardSentMessage){
-                Board = loadBoard(((BoardSentMessage) e).getChanges());
+            if (e instanceof LoadBoardRequest){
+                Board = loadBoard(((LoadBoardRequest) e).getChanges());
+                StartGame();
                 notify(new PlacePanelEvent(GameConfiguration.OFFLINE.getPANEL_INDEX()));
             }
-            if (e instanceof FigureChosenListenerEvent) {
-                addFiguresToMove(((FigureChosenListenerEvent) e).getIndex());
+            if (e instanceof ChooseFigureListenerRequest) {
+                addFiguresToMove(((ChooseFigureListenerRequest) e).getIndex());
                 if (getFiguresToMove().size() == 2) {
                     Integer source = getFiguresToMove().get(0);
                     Integer destination = getFiguresToMove().get(1);

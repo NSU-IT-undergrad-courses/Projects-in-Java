@@ -1,15 +1,15 @@
-rook#4#2#crosshair#1 2
+rook#4#3#horse#1 2 3 4 5 6 7
 horse#3#2#horse#1 2
-bishop#4#1#horse#1 2
-queen#4#4#horse#1 2
-king#1#1#horse#1 2
-bishop#4#1#horse#1 2
+bishop#4#1#horse#1 2 3 4 5 6 7
+queen#4#4#horse#1 2 3 4 5 6 7
+king#1#1#horse#1
+bishop#4#1#horse#1 2 3 4 5 6 7
 horse#3#2#horse#1 2
-rook#4#2#crosshair#1 2
+rook#4#3#horse#1 2 3 4 5 6 7
 pawn#1#1#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1
-pawn#1#1#forward#1
+pawn#1#11#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1

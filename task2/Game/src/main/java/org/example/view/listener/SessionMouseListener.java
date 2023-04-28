@@ -1,16 +1,15 @@
 package org.example.view.listener;
 
-import org.example.observer.Observable;
-import org.example.observer.ObservableImpl;
-import org.example.observer.event.session.view.FigureChosenListenerEvent;
-import org.example.observer.event.session.view.ReleaseStatsListenerEvent;
+import org.example.observer.event.session.view.ChooseFigureListenerRequest;
 import org.example.observer.event.session.view.MovesRequest;
+import org.example.observer.event.session.view.ReleaseStatsListenerEvent;
 import org.example.observer.event.session.view.StatsRequest;
+import org.example.view.panels.GamePanel;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class SessionMouseListener extends ObservableImpl implements MouseListener, Observable {
+public class SessionMouseListener implements MouseListener {
     public Integer getIndex() {
         return index;
     }
@@ -21,15 +20,21 @@ public class SessionMouseListener extends ObservableImpl implements MouseListene
 
     private Integer index;
 
+    public SessionMouseListener(GamePanel parent) {
+        this.parent = parent;
+    }
+
+    private final GamePanel parent;
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        parent.notify(new MovesRequest(getIndex()));
+        parent.notify(new ChooseFigureListenerRequest(getIndex()));
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        notify(new MovesRequest(getIndex()));
-        notify(new FigureChosenListenerEvent(getIndex()));
     }
 
     @Override
@@ -38,12 +43,12 @@ public class SessionMouseListener extends ObservableImpl implements MouseListene
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        notify(new StatsRequest(getIndex()));
+        parent.notify(new StatsRequest(getIndex()));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        notify(new ReleaseStatsListenerEvent());
+        parent.handle(new ReleaseStatsListenerEvent());
     }
 
 }

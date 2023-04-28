@@ -6,7 +6,7 @@ import org.example.observer.event.Event;
 import org.example.observer.event.boardcreator.controller.BoardsTeamsMessage;
 import org.example.observer.event.boardcreator.view.BoardTeamsRequest;
 import org.example.observer.event.boardcreator.view.ChooseTeamRequest;
-import org.example.observer.event.session.controller.BoardSentMessage;
+import org.example.observer.event.session.view.LoadBoardRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,6 @@ import java.util.Scanner;
 import static org.example.GameConfiguration.CheckTeamDirectory;
 
 public class BoardController extends SubController implements Observer {
-    private final List<Observer> observers = new ArrayList<>();
     private final String path = GameConfiguration.TEAM.getDEFAULT_PATH_FILE();
 
     public BoardController(RootController parent) {
@@ -32,13 +31,13 @@ public class BoardController extends SubController implements Observer {
 
     @Override
     public void handle(Event e) {
-            if (e instanceof ChooseTeamRequest){
-                CreateBoard(((ChooseTeamRequest) e).getChosen());
-            }
-            if (e instanceof BoardTeamsRequest){
-                getTeams();
-            }
+        if (e instanceof ChooseTeamRequest){
+            CreateBoard(((ChooseTeamRequest) e).getChosen());
         }
+        if (e instanceof BoardTeamsRequest){
+            getTeams();
+        }
+    }
 
     private void CreateBoard(String[] chosen) {
         InputStream team1 = getClass().getResourceAsStream(GameConfiguration.TEAM.getDEFAULT_PATH_RESOURCE()+ chosen[0] + ".txt");
@@ -90,7 +89,7 @@ public class BoardController extends SubController implements Observer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        notify(new BoardSentMessage(writtenchanges));
+        notify(new LoadBoardRequest(writtenchanges));
 
 
 
