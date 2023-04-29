@@ -9,7 +9,7 @@ rook#4#3#horse#1 2 3 4 5 6 7
 pawn#1#1#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1
-pawn#1#11#forward#1
+pawn#1#1#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1
 pawn#1#1#forward#1

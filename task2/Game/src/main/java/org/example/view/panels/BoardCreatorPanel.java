@@ -103,6 +103,8 @@ public class BoardCreatorPanel extends GamePanel implements Observer {
             initComponents();
             this.teams = ((BoardsTeamsMessage) e).getTeams();
             CreateTeams(teams);
+            first = false;
+            second = false;
         }
     }
 
@@ -230,7 +232,6 @@ public class BoardCreatorPanel extends GamePanel implements Observer {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     BoardCreatorPanel.this.notify(new ChooseTeamRequest(chosen[0].getText(),chosen[1].getText()));
-                    chosen   = new JButton[2];
                     first = second = false;
                     BoardCreatorPanel.this.removeAll();
                     initComponents();
