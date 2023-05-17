@@ -1,0 +1,11 @@
+PUSH 10
+PUSH 2
++
+** 2
+DEFINE pi 3.1415 e 2.72
+PUSH pi
+*
+PUSH e
+** -1
+*
+PRINT
